@@ -12,7 +12,7 @@ namespace IIvT_ProjectAPI.Application.Abstractions.Services
     {
         Task<PagedResponse<ListProductDto>> GetAllProductsAsync(PagedRequest request);
 
-        Task GetByIdProductAsync(string id);
+        Task<ListProductDto> GetByIdProductAsync(string id);
 
         Task<bool> CreateProductAsync(CreateProductDto product);
 

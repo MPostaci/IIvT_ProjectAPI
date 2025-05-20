@@ -2,6 +2,7 @@
 using IIvT_ProjectAPI.Application.Abstractions.Services;
 using IIvT_ProjectAPI.Application.Common.Pagination;
 using IIvT_ProjectAPI.Application.DTOs.Product;
+using IIvT_ProjectAPI.Application.Exceptions;
 using IIvT_ProjectAPI.Application.Repositories;
 using IIvT_ProjectAPI.Application.Util;
 using IIvT_ProjectAPI.Domain.Entities;
@@ -34,6 +35,16 @@ namespace IIvT_ProjectAPI.Persistence.Services
             return await query.ToPagedListAsync<Product, ListProductDto>(_mapper, request);
         }
 
+        public async Task<ListProductDto> GetByIdProductAsync(string id)
+        {
+            return await _productReadRepository.GetByIdAsync(id, false).ContinueWith(t =>
+            {
+                if (t.Result == null)
+                    throw new NotFoundProductException();
+                return _mapper.Map<ListProductDto>(t.Result);
+            });
+        }
+
         public async Task<bool> CreateProductAsync(CreateProductDto product)
         {
             var result = await _productWriteRepository.AddAsync(_mapper.Map<Product>(product));
@@ -49,11 +60,6 @@ namespace IIvT_ProjectAPI.Persistence.Services
         }
 
         public Task DeleteProductAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task GetByIdProductAsync(string id)
         {
             throw new NotImplementedException();
         }
