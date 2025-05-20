@@ -1,0 +1,158 @@
+﻿using IIvT_ProjectAPI.Domain.Entities;
+using IIvT_ProjectAPI.Domain.Entities.Common;
+using IIvT_ProjectAPI.Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace IIvT_ProjectAPI.Persistence.Context
+{
+    public class IIvT_ProjectAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
+    {
+        public IIvT_ProjectAPIDbContext(DbContextOptions options) : base(options)
+        {
+        }
+
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderStatus> OrderStatuses { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Basket> Baskets { get; set; }
+        public DbSet<BasketItem> BasketItems { get; set; }
+        public DbSet<NewsItem> NewsItems { get; set; }
+        public DbSet<Announcement> Announcements { get; set; }
+        public DbSet<MediaFile> MediaFiles { get; set; }
+
+
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+
+            // Enum
+            builder.Entity<Category>()
+                .Property(c => c.ContentType)
+                .HasConversion<int>()
+                .HasColumnName("ContentType");
+
+            builder.Entity<MediaFile>()
+                .Property(m => m.OwnerType)
+                .HasConversion<int>()
+                .HasColumnName("OwnerType");
+
+            // Category <=> NewsItem / Announcement (1:1)
+            builder.Entity<Category>()
+                .HasOne(c => c.NewsItem)
+                .WithOne(n => n.Category)
+                .HasForeignKey<NewsItem>(n => n.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Category>()
+                .HasOne(c => c.Announcement)
+                .WithOne(a => a.Category)
+                .HasForeignKey<Announcement>(a => a.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // AppUser <=> NewsItem / Announcement (1:N)
+            builder.Entity<NewsItem>()
+                .HasOne(n => n.Publisher)
+                .WithMany()
+                .HasForeignKey(n => n.PublisherId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Announcement>()
+                .HasOne(a => a.Publisher)
+                .WithMany()
+                .HasForeignKey(a => a.PublisherId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // OrderStatus <=> Order (1:N)
+            builder.Entity<OrderStatus>()
+                .HasMany(os => os.Orders)
+                .WithOne(o => o.OrderStatus)
+                .HasForeignKey(o => o.OrderStatusId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Order <=> OrderDetail (1:N)
+            builder.Entity<OrderDetail>()
+                .HasKey(od => new { od.OrderId, od.ProductId });
+
+            builder.Entity<OrderDetail>()
+                .HasOne(od => od.Order)
+                .WithMany(o => o.OrderDetails)
+                .HasForeignKey(od => od.OrderId);
+
+            builder.Entity<OrderDetail>()
+                .HasOne(od => od.Product)
+                .WithMany()
+                .HasForeignKey(od => od.ProductId);
+
+            // Basket <=> BasketItem (1:N)
+            builder.Entity<BasketItem>()
+                .HasKey(bi => new { bi.BasketId, bi.ProductId });
+
+            builder.Entity<BasketItem>()
+                .HasOne(bi => bi.Basket)
+                .WithMany(b => b.BasketItems)
+                .HasForeignKey(bi => bi.BasketId)
+                .IsRequired(false);
+
+            builder.Entity<BasketItem>()
+                .HasOne(bi => bi.Product)
+                .WithMany(p => p.BasketItems)
+                .HasForeignKey(bi => bi.ProductId);
+
+            // Basket <=> AppUser (1:1)
+            builder.Entity<Basket>()
+                .HasOne(b => b.User)
+                .WithOne()
+                .HasForeignKey<Basket>(b => b.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Order <=> AppUser (N:1)
+            builder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany()
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Soft Delete
+            var softDeleteInterface = typeof(ISoftDelete);
+            foreach (var entityType in builder.Model.GetEntityTypes()
+                .Where(t => softDeleteInterface.IsAssignableFrom(t.ClrType)))
+            {
+                var parameter = Expression.Parameter(entityType.ClrType, "e");
+                var prop = Expression.Property(parameter, nameof(ISoftDelete.IsDeleted));
+                var condition = Expression.Equal(prop, Expression.Constant(false));
+                var lambda = Expression.Lambda(condition, parameter);
+
+                builder.Entity(entityType.ClrType)
+                    .HasQueryFilter(lambda);
+            }
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var datas = ChangeTracker.Entries<BaseEntity>();
+
+            foreach (var data in datas)
+            {
+                _ = data.State switch
+                {
+                    EntityState.Added => data.Entity.CreatedDate = DateTime.UtcNow,
+                    EntityState.Modified => data.Entity.UpdatedDate = DateTime.UtcNow,
+                    _ => DateTime.UtcNow
+                };
+            }
+
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+    }
+}
