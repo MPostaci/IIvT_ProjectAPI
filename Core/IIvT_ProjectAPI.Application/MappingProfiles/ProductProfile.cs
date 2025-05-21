@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IIvT_ProjectAPI.Application.DTOs.Product;
 using IIvT_ProjectAPI.Application.Features.Commands.Product.CreateProduct;
+using IIvT_ProjectAPI.Application.Features.Commands.Product.UpdateProduct;
 using IIvT_ProjectAPI.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,9 @@ namespace IIvT_ProjectAPI.Application.MappingProfiles
         {
             CreateMap<Product, ListProductDto>();
             CreateMap<CreateProductDto, Product>();
+            CreateMap<UpdateProductDto, Product>();
             CreateMap<CreateProductCommandRequest, CreateProductDto>();
+            CreateMap<UpdateProductCommandRequest, UpdateProductDto>();
 
 
             //// Product → ListProductDto

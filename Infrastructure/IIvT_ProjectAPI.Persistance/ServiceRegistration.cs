@@ -62,6 +62,7 @@ namespace IIvT_ProjectAPI.Persistence
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IBasketService, BasketService>();
         }
     }
 }

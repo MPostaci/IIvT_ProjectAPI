@@ -1,5 +1,7 @@
 ﻿using IIvT_ProjectAPI.Application.DTOs.Product;
 using IIvT_ProjectAPI.Application.Features.Commands.Product.CreateProduct;
+using IIvT_ProjectAPI.Application.Features.Commands.Product.DeleteProduct;
+using IIvT_ProjectAPI.Application.Features.Commands.Product.UpdateProduct;
 using IIvT_ProjectAPI.Application.Features.Queries.Product.GetAllProducts;
 using IIvT_ProjectAPI.Application.Features.Queries.Product.GetByIdProduct;
 using MediatR;
@@ -36,6 +38,22 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateProductCommandRequest request)
+        {
+            var result = await _mediator.Send(request);
+
+            return Ok(result);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateProductCommandRequest request)
+        {
+            var result = await _mediator.Send(request);
+
+            return Ok(result);
+        }
+
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete([FromRoute] DeleteProductCommandRequest request)
         {
             var result = await _mediator.Send(request);
 

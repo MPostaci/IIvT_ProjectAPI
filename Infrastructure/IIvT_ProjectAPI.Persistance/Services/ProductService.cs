@@ -4,13 +4,7 @@ using IIvT_ProjectAPI.Application.Common.Pagination;
 using IIvT_ProjectAPI.Application.DTOs.Product;
 using IIvT_ProjectAPI.Application.Exceptions;
 using IIvT_ProjectAPI.Application.Repositories;
-using IIvT_ProjectAPI.Application.Util;
 using IIvT_ProjectAPI.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IIvT_ProjectAPI.Persistence.Services
 {
@@ -59,14 +53,33 @@ namespace IIvT_ProjectAPI.Persistence.Services
 
         }
 
-        public Task DeleteProductAsync()
+        public async Task<bool> UpdateProductAsync(UpdateProductDto product)
         {
-            throw new NotImplementedException();
+            Product oldProduct = await _productReadRepository.GetByIdAsync(product.Id) 
+                ?? throw new NotFoundProductException();
+
+            oldProduct.Name = product.Name;
+            oldProduct.Stock = product.Stock;
+            oldProduct.Price = product.Price;
+
+            var result = _productWriteRepository.Update(oldProduct);
+
+            if (result)
+                result = await _productWriteRepository.SaveChangesAsync();
+
+            return result;
         }
 
-        public Task UpdateProductAsync()
+        public async Task<bool> DeleteProductAsync(string id)
         {
-            throw new NotImplementedException();
+            Product product = await _productReadRepository.GetByIdAsync(id)
+                ?? throw new NotFoundProductException();
+            var result = _productWriteRepository.Remove(product);
+
+            if (result)
+                result = await _productWriteRepository.SaveChangesAsync();
+
+            return result;
         }
     }
 }

@@ -16,8 +16,8 @@ namespace IIvT_ProjectAPI.Application.Abstractions.Services
 
         Task<bool> CreateProductAsync(CreateProductDto product);
 
-        Task UpdateProductAsync();
+        Task<bool> UpdateProductAsync(UpdateProductDto product);
 
-        Task DeleteProductAsync();
+        Task<bool> DeleteProductAsync(string id);
     }
 }

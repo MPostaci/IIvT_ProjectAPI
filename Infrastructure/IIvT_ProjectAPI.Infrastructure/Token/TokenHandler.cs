@@ -28,7 +28,7 @@ namespace IIvT_ProjectAPI.Infrastructure.Token
             SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
 
             token.AccessTokenExpiration = DateTime.UtcNow
-                .AddSeconds(Convert.ToDouble(_configuration["Token:AccessTokenExpiration"]));
+                .AddMinutes(Convert.ToDouble(_configuration["Token:AccessTokenExpiration"]));
 
             JwtSecurityToken securityToken = new(new JwtHeader(signingCredentials),
                 new JwtPayload(
