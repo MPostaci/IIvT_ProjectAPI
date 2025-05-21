@@ -1,9 +1,11 @@
 ﻿using IIvT_ProjectAPI.Application.Abstractions.Services;
 using IIvT_ProjectAPI.Application.Repositories;
 using IIvT_ProjectAPI.Domain.Entities.Identity;
+using IIvT_ProjectAPI.Persistence.Behaviors;
 using IIvT_ProjectAPI.Persistence.Context;
 using IIvT_ProjectAPI.Persistence.Repositories;
 using IIvT_ProjectAPI.Persistence.Services;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -63,6 +65,13 @@ namespace IIvT_ProjectAPI.Persistence
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IBasketService, BasketService>();
+
+
+
+            services.AddTransient(
+                typeof(IPipelineBehavior<,>),
+                typeof(EfTransactionBehavior<,>)
+                );
         }
     }
 }
