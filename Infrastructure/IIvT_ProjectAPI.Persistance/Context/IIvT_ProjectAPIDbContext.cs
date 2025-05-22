@@ -27,7 +27,12 @@ namespace IIvT_ProjectAPI.Persistence.Context
         public DbSet<BasketItem> BasketItems { get; set; }
         public DbSet<NewsItem> NewsItems { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
+        public DbSet<Event> Events { get; set; }
         public DbSet<MediaFile> MediaFiles { get; set; }
+        public DbSet<ProductMediaFile> ProductMediaFiles { get; set; }
+        public DbSet<NewsItemMediaFile> NewsItemMediaFiles { get; set; }
+        public DbSet<AnnouncementMediaFile> AnnouncementMediaFiles { get; set; }
+        public DbSet<EventMediaFile> EventMediaFiles { get; set; }
 
 
 
@@ -42,10 +47,6 @@ namespace IIvT_ProjectAPI.Persistence.Context
                 .HasConversion<int>()
                 .HasColumnName("ContentType");
 
-            builder.Entity<MediaFile>()
-                .Property(m => m.OwnerType)
-                .HasConversion<int>()
-                .HasColumnName("OwnerType");
 
             // Category <=> NewsItem / Announcement (1:1)
             builder.Entity<Category>()
@@ -122,6 +123,25 @@ namespace IIvT_ProjectAPI.Persistence.Context
                 .WithMany()
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+
+            // 1) Map the base
+            builder.Entity<MediaFile>()
+                .ToTable("MediaFiles");
+
+            // 2) Map each derived type to its own table
+            builder.Entity<ProductMediaFile>()
+                .ToTable("ProductMediaFiles");
+
+            builder.Entity<NewsItemMediaFile>()
+                .ToTable("NewsItemMediaFiles");
+
+            builder.Entity<AnnouncementMediaFile>()
+                .ToTable("AnnouncementMediaFiles");
+
+            builder.Entity<EventMediaFile>()
+                .ToTable("EventMediaFiles");
+
 
             // Soft Delete
             var softDeleteInterface = typeof(ISoftDelete);

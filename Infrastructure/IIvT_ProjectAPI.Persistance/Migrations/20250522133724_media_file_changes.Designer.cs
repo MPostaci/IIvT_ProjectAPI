@@ -3,6 +3,7 @@ using System;
 using IIvT_ProjectAPI.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IIvT_ProjectAPI.Persistence.Migrations
 {
     [DbContext(typeof(IIvT_ProjectAPIDbContext))]
-    partial class IIvT_ProjectAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250522133724_media_file_changes")]
+    partial class media_file_changes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,56 +161,6 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Event", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PublisherId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("PublisherId");
-
-                    b.ToTable("Events");
-                });
-
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Identity.AppRole", b =>
                 {
                     b.Property<string>("Id")
@@ -318,6 +270,10 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -335,7 +291,9 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MediaFiles", (string)null);
+                    b.ToTable("MediaFiles");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("MediaFile");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.NewsItem", b =>
@@ -632,19 +590,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                     b.HasIndex("AnnouncementId")
                         .IsUnique();
 
-                    b.ToTable("AnnouncementMediaFiles", (string)null);
-                });
-
-            modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.EventMediaFile", b =>
-                {
-                    b.HasBaseType("IIvT_ProjectAPI.Domain.Entities.MediaFile");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uuid");
-
-                    b.HasIndex("EventId");
-
-                    b.ToTable("EventMediaFiles", (string)null);
+                    b.HasDiscriminator().HasValue("AnnouncementMediaFile");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.NewsItemMediaFile", b =>
@@ -659,7 +605,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasIndex("NewsItemId");
 
-                    b.ToTable("NewsItemMediaFiles", (string)null);
+                    b.HasDiscriminator().HasValue("NewsItemMediaFile");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.ProductMediaFile", b =>
@@ -670,11 +616,12 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<bool>("Showcase")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("ProductMediaFile_Showcase");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductMediaFiles", (string)null);
+                    b.HasDiscriminator().HasValue("ProductMediaFile");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Announcement", b =>
@@ -730,25 +677,6 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                     b.Navigation("Basket");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Event", b =>
-                {
-                    b.HasOne("IIvT_ProjectAPI.Domain.Entities.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IIvT_ProjectAPI.Domain.Entities.Identity.AppUser", "Publisher")
-                        .WithMany()
-                        .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Publisher");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.NewsItem", b =>
@@ -875,40 +803,11 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IIvT_ProjectAPI.Domain.Entities.MediaFile", null)
-                        .WithOne()
-                        .HasForeignKey("IIvT_ProjectAPI.Domain.Entities.AnnouncementMediaFile", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Announcement");
-                });
-
-            modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.EventMediaFile", b =>
-                {
-                    b.HasOne("IIvT_ProjectAPI.Domain.Entities.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IIvT_ProjectAPI.Domain.Entities.MediaFile", null)
-                        .WithOne()
-                        .HasForeignKey("IIvT_ProjectAPI.Domain.Entities.EventMediaFile", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.NewsItemMediaFile", b =>
                 {
-                    b.HasOne("IIvT_ProjectAPI.Domain.Entities.MediaFile", null)
-                        .WithOne()
-                        .HasForeignKey("IIvT_ProjectAPI.Domain.Entities.NewsItemMediaFile", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("IIvT_ProjectAPI.Domain.Entities.NewsItem", "NewsItem")
                         .WithMany("Files")
                         .HasForeignKey("NewsItemId")
@@ -920,12 +819,6 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.ProductMediaFile", b =>
                 {
-                    b.HasOne("IIvT_ProjectAPI.Domain.Entities.MediaFile", null)
-                        .WithOne()
-                        .HasForeignKey("IIvT_ProjectAPI.Domain.Entities.ProductMediaFile", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("IIvT_ProjectAPI.Domain.Entities.Product", "Product")
                         .WithMany("Files")
                         .HasForeignKey("ProductId")

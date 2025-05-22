@@ -2,8 +2,10 @@
 using IIvT_ProjectAPI.Application.Features.Commands.Product.CreateProduct;
 using IIvT_ProjectAPI.Application.Features.Commands.Product.DeleteProduct;
 using IIvT_ProjectAPI.Application.Features.Commands.Product.UpdateProduct;
+using IIvT_ProjectAPI.Application.Features.Commands.ProductImage.UploadProductImage;
 using IIvT_ProjectAPI.Application.Features.Queries.Product.GetAllProducts;
 using IIvT_ProjectAPI.Application.Features.Queries.Product.GetByIdProduct;
+using IIvT_ProjectAPI.Application.Features.Queries.ProductImage.GetProductImages;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,14 +24,14 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] GetAllProductsQueryRequest request)
+        public async Task<IActionResult> Get([FromQuery] GetAllProductsQueryRequest request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetById([FromRoute] GetByIdProductQueryRequest request)
+        public async Task<IActionResult> Get([FromRoute] GetByIdProductQueryRequest request)
         {
             ListProductDto result = await _mediator.Send(request);
 
@@ -57,6 +59,22 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         {
             var result = await _mediator.Send(request);
 
+            return Ok(result);
+        }
+
+        // ----- Image Operations ----- \\
+
+        [HttpGet("[action]/{Id}")]
+        public async Task<IActionResult> GetImages([FromRoute] GetProductImagesQueryRequest request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Upload([FromForm] UploadProductImageCommandRequest request)
+        {
+            var result = await _mediator.Send(request);
             return Ok(result);
         }
     }

@@ -12,9 +12,8 @@ namespace IIvT_ProjectAPI.Domain.Entities
     {
         public string FileName { get; set; }
         public string Path { get; set; }
-        public string Storage { get; set; } // Local, Cloud, etc.
-        public Guid OwnerId { get; set; }
-        public MediaOwnerType OwnerType { get; set; }
+        public string Storage { get; set; }
+        public FileType FileTpye { get; set; }
 
         [NotMapped]
         public override DateTime? UpdatedDate { get => base.UpdatedDate; set => base.UpdatedDate = value; }

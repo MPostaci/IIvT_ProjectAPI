@@ -12,7 +12,7 @@ namespace IIvT_ProjectAPI.Domain.Entities
         public string Name { get; set; }
         public int Stock { get; set; }
         public decimal Price { get; set; }
-        public ICollection<MediaFile> Images { get; set; }
+        public ICollection<ProductMediaFile> Files { get; set; }
         public ICollection<BasketItem> BasketItems { get; set; }
     }
 }

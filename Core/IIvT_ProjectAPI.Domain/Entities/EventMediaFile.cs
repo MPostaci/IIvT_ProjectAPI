@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace IIvT_ProjectAPI.Domain.Entities
 {
-    public enum MediaOwnerType
+    public class EventMediaFile : MediaFile
     {
-        Product,
-        NewsItem,
-        Announcement
+        public Guid EventId { get; set; }
+        public Event Event { get; set; }
     }
 }

@@ -21,4 +21,8 @@
     <ProjectReference Include="..\..\Infrastructure\IIvT_ProjectAPI.Persistance\IIvT_ProjectAPI.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>
