@@ -43,8 +43,6 @@ namespace IIvT_ProjectAPI.Persistence.Services
         {
             var result = await _productWriteRepository.AddAsync(_mapper.Map<Product>(product));
 
-            if (result)
-                result = await _productWriteRepository.SaveChangesAsync();
 
             if (!result)
                 throw new Exception("Product could not be created");
@@ -64,9 +62,6 @@ namespace IIvT_ProjectAPI.Persistence.Services
 
             var result = _productWriteRepository.Update(oldProduct);
 
-            if (result)
-                result = await _productWriteRepository.SaveChangesAsync();
-
             return result;
         }
 
@@ -75,9 +70,6 @@ namespace IIvT_ProjectAPI.Persistence.Services
             Product product = await _productReadRepository.GetByIdAsync(id)
                 ?? throw new NotFoundProductException();
             var result = _productWriteRepository.Remove(product);
-
-            if (result)
-                result = await _productWriteRepository.SaveChangesAsync();
 
             return result;
         }

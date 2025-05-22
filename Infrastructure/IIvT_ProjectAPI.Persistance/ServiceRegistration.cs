@@ -1,4 +1,6 @@
-﻿using IIvT_ProjectAPI.Application.Abstractions.Services;
+﻿using FluentValidation;
+using IIvT_ProjectAPI.Application;
+using IIvT_ProjectAPI.Application.Abstractions.Services;
 using IIvT_ProjectAPI.Application.Repositories;
 using IIvT_ProjectAPI.Domain.Entities.Identity;
 using IIvT_ProjectAPI.Persistence.Behaviors;
@@ -60,12 +62,18 @@ namespace IIvT_ProjectAPI.Persistence
             services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
 
 
-
-
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IBasketService, BasketService>();
 
+
+
+
+
+            services.AddTransient(
+                typeof(IPipelineBehavior<,>),
+                typeof(ValidationBehavior<,>)
+                );
 
 
             services.AddTransient(

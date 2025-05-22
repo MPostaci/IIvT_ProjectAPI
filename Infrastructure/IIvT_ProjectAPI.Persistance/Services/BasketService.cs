@@ -71,7 +71,6 @@ namespace IIvT_ProjectAPI.Persistence.Services
                 };
                 await _basketWriteRepository.AddAsync(basket);
 
-                await _basketWriteRepository.SaveChangesAsync();
             }
 
             return basket;
@@ -116,8 +115,6 @@ namespace IIvT_ProjectAPI.Persistence.Services
                 _basketItemWriteRepository.Update(basketItem);
             }
 
-            await _basketWriteRepository.SaveChangesAsync();
-
             return true;
         }
 
@@ -134,7 +131,6 @@ namespace IIvT_ProjectAPI.Persistence.Services
 
             _basketItemWriteRepository.Remove(itemToRemove);
 
-            await _basketItemWriteRepository.SaveChangesAsync();
 
             return true;
         }
@@ -160,7 +156,6 @@ namespace IIvT_ProjectAPI.Persistence.Services
                 _basketItemWriteRepository.Update(basketItem);
             }
 
-            await _basketItemWriteRepository.SaveChangesAsync();
 
             return true;
         }
@@ -178,11 +173,9 @@ namespace IIvT_ProjectAPI.Persistence.Services
                 .Where(x => x.BasketId == basket.Id)
                 .ForEachAsync(x => _basketItemWriteRepository.Remove(x));
 
-            await _basketItemWriteRepository.SaveChangesAsync();
 
             await _basketWriteRepository.RemoveAsync(basket.Id.ToString());
 
-            await _basketWriteRepository.SaveChangesAsync();
 
             return true;
         }
