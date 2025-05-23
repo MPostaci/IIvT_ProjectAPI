@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace IIvT_ProjectAPI.Domain.Entities
 {
-    public enum FileType
+    public enum FileTypeEnum
     {
-        Photo,
+        Image,
         Video,
         Document,
+        Other,
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using IIvT_ProjectAPI.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace IIvT_ProjectAPI.Application.Abstractions.Storage
     {
         Task<List<(string fileName, string pathOrContainerName)>> UploadAsync(string pathOrContainerName, IFormFileCollection files);
 
-        Task DeleteAsync(string pathOrContainerName, string fileName);
+        Task DeleteAsync(string path);
 
         List<string> GetFiles(string pathOrContainerName);
 

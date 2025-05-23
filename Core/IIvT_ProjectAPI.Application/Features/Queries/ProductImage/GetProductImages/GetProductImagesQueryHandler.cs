@@ -14,30 +14,27 @@ namespace IIvT_ProjectAPI.Application.Features.Queries.ProductImage.GetProductIm
     public class GetProductImagesQueryHandler : IRequestHandler<GetProductImagesQueryRequest, List<GetProductImagesQueryResponse>>
     {
         readonly IStorageService _storageService;
-        readonly IMediaFileReadRepository _mediaFileReadRepository;
+        readonly IProductMediaFileReadRepository _productMediaFileReadRepository;
         readonly IConfiguration _configuration;
 
-        public GetProductImagesQueryHandler(IStorageService storageService, IMediaFileReadRepository mediaFileReadRepository, IConfiguration configuration)
+        public GetProductImagesQueryHandler(IStorageService storageService, IConfiguration configuration, IProductMediaFileReadRepository productMediaFileReadRepository)
         {
             _storageService = storageService;
-            _mediaFileReadRepository = mediaFileReadRepository;
             _configuration = configuration;
+            _productMediaFileReadRepository = productMediaFileReadRepository;
         }
 
         public async Task<List<GetProductImagesQueryResponse>> Handle(GetProductImagesQueryRequest request, CancellationToken cancellationToken)
         {
-            //var x = _mediaFileReadRepository.GetWhere()
-            //    .Select(x => new GetProductImagesQueryResponse()
-            //    {
-            //        Id = x.Id.ToString(),
-            //        FileName = x.FileName,
-            //        Path = x.Path
-            //    }).ToList();
-            //todo productimage
+            var files = _productMediaFileReadRepository.Table.Where(x => x.ProductId == Guid.Parse(request.Id))
+                .Select(x => new GetProductImagesQueryResponse()
+                {
+                    Id = x.Id.ToString(),
+                    FileName = x.FileName,
+                    Path = x.Path
+                }).ToList();
 
-            return new List<GetProductImagesQueryResponse>();
-
-                //Path = $"{configuration["BaseStorageUrl"]}/{p.Path}"
-    }
+            return files;
+        }
     }
 }

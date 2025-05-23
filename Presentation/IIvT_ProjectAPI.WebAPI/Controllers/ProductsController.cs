@@ -2,6 +2,8 @@
 using IIvT_ProjectAPI.Application.Features.Commands.Product.CreateProduct;
 using IIvT_ProjectAPI.Application.Features.Commands.Product.DeleteProduct;
 using IIvT_ProjectAPI.Application.Features.Commands.Product.UpdateProduct;
+using IIvT_ProjectAPI.Application.Features.Commands.ProductImage.ChangeShowcaseIamge;
+using IIvT_ProjectAPI.Application.Features.Commands.ProductImage.RemoveProductImage;
 using IIvT_ProjectAPI.Application.Features.Commands.ProductImage.UploadProductImage;
 using IIvT_ProjectAPI.Application.Features.Queries.Product.GetAllProducts;
 using IIvT_ProjectAPI.Application.Features.Queries.Product.GetByIdProduct;
@@ -72,7 +74,21 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Upload([FromForm] UploadProductImageCommandRequest request)
+        public async Task<IActionResult> UploadFile([FromForm] UploadProductImageCommandRequest request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+
+        [HttpDelete("[action]/{Id}")]
+        public async Task<IActionResult> RemoveFile([FromRoute] RemoveProductImageCommandRequest request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]/{Id}")]
+        public async Task<IActionResult> ChangeShowcaseImage([FromRoute] ChangeShowcaseImageCommandRequest request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);

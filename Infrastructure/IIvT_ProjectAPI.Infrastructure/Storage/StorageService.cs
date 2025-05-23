@@ -1,4 +1,6 @@
 ﻿using IIvT_ProjectAPI.Application.Abstractions.Storage;
+using IIvT_ProjectAPI.Domain.Entities;
+using IIvT_ProjectAPI.Infrastructure.Operations;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -25,14 +27,22 @@ namespace IIvT_ProjectAPI.Infrastructure.Storage
         public bool HasFile(string pathOrContainerName, string fileName)
             => _storage.HasFile(pathOrContainerName, fileName);
 
-        public Task DeleteAsync(string pathOrContainerName, string fileName)
-        {
-            throw new NotImplementedException();
-        }
+        public Task DeleteAsync(string path)
+            => _storage.DeleteAsync(path);
 
         public List<string> GetFiles(string pathOrContainerName)
         {
             throw new NotImplementedException();
+        }
+
+        public FileTypeEnum GetFileType(string fileName)
+        {
+            string extension = Path.GetExtension(fileName).Replace(".", "");
+
+            FileTypeEnum fileType = FileTypeOperations.GetFileTypeEnum(extension);
+
+            return fileType;
+
         }
     }
 }

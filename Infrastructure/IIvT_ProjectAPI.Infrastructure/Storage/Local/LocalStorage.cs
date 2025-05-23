@@ -1,4 +1,5 @@
 ﻿using IIvT_ProjectAPI.Application.Abstractions.Storage.Local;
+using IIvT_ProjectAPI.Domain.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
@@ -13,15 +14,14 @@ namespace IIvT_ProjectAPI.Infrastructure.Storage.Local
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public Task DeleteAsync(string pathOrContainerName, string fileName)
+        public async Task DeleteAsync(string path)
+            => File.Delete($"{_webHostEnvironment.WebRootPath}/{path}");
+
+        public List<string> GetFiles(string path)
         {
             throw new NotImplementedException();
         }
 
-        public List<string> GetFiles(string pathOrContainerName)
-        {
-            throw new NotImplementedException();
-        }
 
         public bool HasFile(string path, string fileName)
             => File.Exists($"{path}\\{fileName}");

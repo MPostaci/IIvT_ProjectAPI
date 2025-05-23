@@ -13,12 +13,14 @@ namespace IIvT_ProjectAPI.Application.Features.Commands.ProductImage.UploadProdu
     public class UploadProductImageCommandHandler : IRequestHandler<UploadProductImageCommandRequest, UploadProductImageCommandResponse>
     {
         readonly IStorageService _storageService;
-        readonly IMediaFileWriteRepository _mediaFileWriteRepository;
+        //readonly IMediaFileWriteRepository _mediaFileWriteRepository;
+        readonly IProductMediaFileWriteRepository _productMediaFileWriteRepository;
 
-        public UploadProductImageCommandHandler(IStorageService storageService, IMediaFileWriteRepository mediaFileWriteRepository)
+        public UploadProductImageCommandHandler(IStorageService storageService, IMediaFileWriteRepository mediaFileWriteRepository, IProductMediaFileWriteRepository productMediaFileWriteRepository)
         {
             _storageService = storageService;
-            _mediaFileWriteRepository = mediaFileWriteRepository;
+            //_mediaFileWriteRepository = mediaFileWriteRepository;
+            _productMediaFileWriteRepository = productMediaFileWriteRepository;
         }
 
 
@@ -27,13 +29,17 @@ namespace IIvT_ProjectAPI.Application.Features.Commands.ProductImage.UploadProdu
 
             List<(string fileName, string pathOrContainerName)> result = await _storageService.UploadAsync("product-images", request.Files);
 
-            await _mediaFileWriteRepository.AddRangeAsync(result.Select(r => new MediaFile
+            await _productMediaFileWriteRepository.AddRangeAsync(result.Select(r => new ProductMediaFile
             {
                 Id = Guid.NewGuid(),
                 FileName = r.fileName,
                 Path = r.pathOrContainerName,
                 Storage = _storageService.StorageName,
+                Showcase = false,
+                ProductId = Guid.Parse(request.Id),
+                FileTpye = _storageService.GetFileType(r.fileName)
             }).ToList());
+
 
             return new();
 

@@ -49,6 +49,9 @@ namespace IIvT_ProjectAPI.Persistence
             services.AddScoped<INewsItemReadRepository, NewsItemReadRepository>();
             services.AddScoped<INewsItemWriteRepository, NewsItemWriteRepository>();
 
+            services.AddScoped<IEventReadRepository, EventReadRepository>();
+            services.AddScoped<IEventWriteRepository, EventWriteRepository>();
+
             services.AddScoped<IOrderReadRepository, OrderReadRepository>();
             services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
 
@@ -60,6 +63,19 @@ namespace IIvT_ProjectAPI.Persistence
 
             services.AddScoped<IProductReadRepository, ProductReadRepository>();
             services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
+
+            services.AddScoped<IProductMediaFileReadRepository, ProductMediaFileReadRepository>();
+            services.AddScoped<IProductMediaFileWriteRepository, ProductMediaFileWriteRepository>();
+
+            services.AddScoped<IAnnouncementMediaFileReadRepository, AnnouncementMediaFileReadRepository>();
+            services.AddScoped<IAnnouncementMediaFileWriteRepository, AnnouncementMediaFileWriteRepository>();
+
+            services.AddScoped<INewsItemMediaFileReadRepository, NewsItemMediaFileReadRepository>();
+            services.AddScoped<INewsItemMediaFileWriteRepository, NewsItemMediaFileWriteRepository>();
+
+            services.AddScoped<IEventMediaFileReadRepository, EventMediaFileReadRepository>();
+            services.AddScoped<IEventMediaFileWriteRepository, EventMediaFileWriteRepository>();
+
 
 
             services.AddScoped<IUserService, UserService>();

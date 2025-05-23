@@ -1,4 +1,5 @@
-﻿using IIvT_ProjectAPI.Infrastructure.Operations;
+﻿using IIvT_ProjectAPI.Domain.Entities;
+using IIvT_ProjectAPI.Infrastructure.Operations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
