@@ -60,8 +60,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("CategoryId")
-                        .IsUnique();
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("PublisherId");
 
@@ -376,8 +375,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("CategoryId")
-                        .IsUnique();
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("PublisherId");
 
@@ -684,8 +682,8 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                         .HasForeignKey("AppUserId");
 
                     b.HasOne("IIvT_ProjectAPI.Domain.Entities.Category", "Category")
-                        .WithOne("Announcement")
-                        .HasForeignKey("IIvT_ProjectAPI.Domain.Entities.Announcement", "CategoryId")
+                        .WithMany("Announcement")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -735,7 +733,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Event", b =>
                 {
                     b.HasOne("IIvT_ProjectAPI.Domain.Entities.Category", "Category")
-                        .WithMany()
+                        .WithMany("Events")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -758,8 +756,8 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                         .HasForeignKey("AppUserId");
 
                     b.HasOne("IIvT_ProjectAPI.Domain.Entities.Category", "Category")
-                        .WithOne("NewsItem")
-                        .HasForeignKey("IIvT_ProjectAPI.Domain.Entities.NewsItem", "CategoryId")
+                        .WithMany("NewsItem")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -948,11 +946,11 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Category", b =>
                 {
-                    b.Navigation("Announcement")
-                        .IsRequired();
+                    b.Navigation("Announcement");
 
-                    b.Navigation("NewsItem")
-                        .IsRequired();
+                    b.Navigation("Events");
+
+                    b.Navigation("NewsItem");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Identity.AppUser", b =>

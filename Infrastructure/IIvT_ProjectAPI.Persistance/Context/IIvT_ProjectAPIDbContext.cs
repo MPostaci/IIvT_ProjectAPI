@@ -50,15 +50,15 @@ namespace IIvT_ProjectAPI.Persistence.Context
 
             // Category <=> NewsItem / Announcement (1:1)
             builder.Entity<Category>()
-                .HasOne(c => c.NewsItem)
+                .HasMany(c => c.NewsItem)
                 .WithOne(n => n.Category)
-                .HasForeignKey<NewsItem>(n => n.CategoryId)
+                .HasForeignKey(n => n.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Category>()
-                .HasOne(c => c.Announcement)
+                .HasMany(c => c.Announcement)
                 .WithOne(a => a.Category)
-                .HasForeignKey<Announcement>(a => a.CategoryId)
+                .HasForeignKey(a => a.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // AppUser <=> NewsItem / Announcement (1:N)

@@ -3,11 +3,6 @@ using IIvT_ProjectAPI.Application.DTOs.Product;
 using IIvT_ProjectAPI.Application.Features.Commands.Product.CreateProduct;
 using IIvT_ProjectAPI.Application.Features.Commands.Product.UpdateProduct;
 using IIvT_ProjectAPI.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IIvT_ProjectAPI.Application.MappingProfiles
 {

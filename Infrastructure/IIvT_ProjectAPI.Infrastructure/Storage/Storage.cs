@@ -24,7 +24,7 @@ namespace IIvT_ProjectAPI.Infrastructure.Storage
 
                 if (hasFileMethod(pathOrContainerName, newFileName))
                 {
-                    string newFileNameWithDate = $"{oldName}_{DateTime.Now:yyyyMMddHHmmss}{extension}";
+                    string newFileNameWithDate = $"{newFileName}_{DateTime.Now:yyyyMMddHHmmss}{extension}";
                     return newFileNameWithDate;
                 }
                 else
