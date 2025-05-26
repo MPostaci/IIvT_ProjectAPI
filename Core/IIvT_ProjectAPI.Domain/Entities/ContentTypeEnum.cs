@@ -9,6 +9,7 @@ namespace IIvT_ProjectAPI.Domain.Entities
     public enum ContentTypeEnum
     {
         NewsItem = 1,
-        Announcement = 2
+        Announcement = 2,
+        Event = 3,
     }
 }

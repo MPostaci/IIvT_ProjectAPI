@@ -82,6 +82,7 @@ namespace IIvT_ProjectAPI.Persistence
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IAnnouncementService, AnnouncementService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
 
 

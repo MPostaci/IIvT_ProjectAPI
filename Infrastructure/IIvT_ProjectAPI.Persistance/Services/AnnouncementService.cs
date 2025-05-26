@@ -6,6 +6,7 @@ using IIvT_ProjectAPI.Application.DTOs.Announcement;
 using IIvT_ProjectAPI.Application.Exceptions;
 using IIvT_ProjectAPI.Application.Repositories;
 using IIvT_ProjectAPI.Domain.Entities;
+using IIvT_ProjectAPI.Domain.Entities.Common;
 using IIvT_ProjectAPI.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -23,12 +24,13 @@ namespace IIvT_ProjectAPI.Persistence.Services
         readonly IAnnouncementReadRepository _announcementReadRepository;
         readonly IAnnouncementWriteRepository _announcementWriteRepository;
         readonly IAnnouncementMediaFileWriteRepository _announcementMediaFileWriteRepository;
+        readonly IAnnouncementMediaFileReadRepository _announcementMediaFileReadRepository;
         readonly UserManager<AppUser> _userManager;
         readonly IHttpContextAccessor _httpContextAccessor;
         readonly IStorageService _storageService;
         readonly IMapper _mapper;
 
-        public AnnouncementService(IAnnouncementReadRepository announcementReadRepository, IAnnouncementWriteRepository announcementWriteRepository, UserManager<AppUser> userManager, IAnnouncementMediaFileWriteRepository announcementMediaFileWriteRepository, IHttpContextAccessor httpContextAccessor, IStorageService storageService, IMapper mapper)
+        public AnnouncementService(IAnnouncementReadRepository announcementReadRepository, IAnnouncementWriteRepository announcementWriteRepository, UserManager<AppUser> userManager, IAnnouncementMediaFileWriteRepository announcementMediaFileWriteRepository, IHttpContextAccessor httpContextAccessor, IStorageService storageService, IMapper mapper, IAnnouncementMediaFileReadRepository announcementMediaFileReadRepository)
         {
             _announcementReadRepository = announcementReadRepository;
             _announcementWriteRepository = announcementWriteRepository;
@@ -37,6 +39,7 @@ namespace IIvT_ProjectAPI.Persistence.Services
             _httpContextAccessor = httpContextAccessor;
             _storageService = storageService;
             _mapper = mapper;
+            _announcementMediaFileReadRepository = announcementMediaFileReadRepository;
         }
 
         private async Task<AppUser> ContextUser()
@@ -86,7 +89,7 @@ namespace IIvT_ProjectAPI.Persistence.Services
             return result;
         }
 
-        public async Task CreateAnnouncement(CreateAnnouncementDto createAnnouncementDto)
+        public async Task<bool> CreateAnnouncement(CreateAnnouncementDto createAnnouncementDto)
         {
             var user = await ContextUser();
 
@@ -103,6 +106,48 @@ namespace IIvT_ProjectAPI.Persistence.Services
                 File = await UploadFile(createAnnouncementDto.File, id),
             });
 
+            return true;
+        }
+
+        public async Task<bool> DeleteAnnouncement(string id)
+        {
+            var announcement = await _announcementReadRepository.GetByIdAsync(id)
+                ?? throw new NotFoundAnnouncementException();
+
+            announcement.IsDeleted = true;
+
+            return true;
+        }
+
+        public async Task<bool> UpdateAnnouncement(UpdateAnnouncementDto updateAnnouncementDto)
+        {
+            var announcement = await _announcementReadRepository.GetByIdAsync(updateAnnouncementDto.Id)
+                ?? throw new NotFoundAnnouncementException();
+
+
+            _mapper.Map(updateAnnouncementDto, announcement);
+
+            if (updateAnnouncementDto.File != null)
+            {
+                var mediaFile = await _announcementMediaFileReadRepository.GetWhere(x => x.AnnouncementId == announcement.Id).FirstOrDefaultAsync();
+                if (mediaFile != null)
+                {
+                    // Delete the old file
+                    await _storageService.DeleteAsync(mediaFile.Path);
+                    await _announcementMediaFileWriteRepository.RemoveAsync(mediaFile.Id.ToString());
+                }
+
+                // Create a new FormFileCollection and add the file
+                FormFileCollection fileCollection = new()
+                {
+                    updateAnnouncementDto.File
+                };
+                announcement.File = await UploadFile(fileCollection, announcement.Id);
+            }
+
+            _announcementWriteRepository.Update(announcement);
+
+            return true;
         }
 
         private async Task<AnnouncementMediaFile> UploadFile(IFormFileCollection file, Guid annId)

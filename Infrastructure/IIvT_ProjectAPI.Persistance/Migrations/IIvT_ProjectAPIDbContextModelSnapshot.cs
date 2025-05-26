@@ -45,6 +45,9 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("PublisherId")
                         .IsRequired()
                         .HasColumnType("text");
@@ -146,6 +149,9 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -180,6 +186,9 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -359,6 +368,9 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("PublisherId")
                         .IsRequired()

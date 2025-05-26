@@ -2,6 +2,7 @@
 using IIvT_ProjectAPI.Application.DTOs.Announcement;
 using IIvT_ProjectAPI.Application.DTOs.Basket;
 using IIvT_ProjectAPI.Application.Features.Commands.Announcement.CreateAnnouncement;
+using IIvT_ProjectAPI.Application.Features.Commands.Announcement.UpdateAnnouncement;
 using IIvT_ProjectAPI.Domain.Entities;
 
 namespace IIvT_ProjectAPI.Application.MappingProfiles
@@ -20,29 +21,23 @@ namespace IIvT_ProjectAPI.Application.MappingProfiles
                     CategoryId = src.CategoryId,
                 });
 
-            //CreateMap<CreateAnnouncementDto, Announcement>();
             CreateMap<Announcement, ListAnnouncementDto>()
                 .ForMember(dest => dest.ContentType, opt => opt.MapFrom(src => src.Category.ContentType));
-                //.ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
-                //.ForMember(dest => dest.CategoryDescription, opt => opt.MapFrom(src => src.Category.Description))
-                //.ForMember(dest => dest.ContentType, opt => opt.MapFrom(src => src.Category.ContentType))
-                //.ForMember(dest => dest.PublisherFullName, opt => opt.MapFrom(src => src.Publisher.FullName));
+            CreateMap<UpdateAnnouncementCommandRequest, UpdateAnnouncementDto>();
+            CreateMap<UpdateAnnouncementDto, Announcement>()
+                .ForMember(dest => dest.CategoryId, opt => {
+                    opt.PreCondition(src => !string.IsNullOrEmpty(src.CategoryId));
+                    opt.MapFrom(src => ParseGuid(src.CategoryId));
+                })
+                .ForMember(opt => opt.File, opt => opt.Ignore())
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) =>
+                    srcMember != null && !(srcMember is string s && string.IsNullOrEmpty(s))
+                ));
+        }
 
-
-            //CreateMap<Basket, ListBasketDto>()
-            //    .ConvertUsing(src => new ListBasketDto
-            //    {
-            //        Id = src.Id,
-            //        UserId = src.UserId,
-            //        Items = src.BasketItems.Select(x => new BasketItemDto
-            //        {
-            //            ProductId = x.ProductId,
-            //            Name = x.Product.Name,
-            //            Stock = x.Product.Stock,
-            //            Price = x.Price,
-            //            Quantity = x.Quantity,
-            //        }).ToList()
-            //    });
+        private static Guid ParseGuid(string? categoryId)
+        {
+            return Guid.TryParse(categoryId, out var guid) ? guid : Guid.Empty;
         }
     }
 }

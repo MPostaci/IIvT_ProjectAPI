@@ -1,4 +1,6 @@
 ﻿using IIvT_ProjectAPI.Application.Features.Commands.Announcement.CreateAnnouncement;
+using IIvT_ProjectAPI.Application.Features.Commands.Announcement.DeleteAnnouncement;
+using IIvT_ProjectAPI.Application.Features.Commands.Announcement.UpdateAnnouncement;
 using IIvT_ProjectAPI.Application.Features.Queries.Announcement.GetAllAnnouncements;
 using IIvT_ProjectAPI.Application.Features.Queries.Announcement.GetAnnouncementsByCategory;
 using IIvT_ProjectAPI.Application.Features.Queries.Announcement.GetAnnouncementsById;
@@ -58,6 +60,24 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
             var result = await _mediator.Send(request);
 
             return Ok("File uploaded successfully");
+        }
+
+        [HttpPut]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        public async Task<IActionResult> UpdateAnnouncement([FromForm] UpdateAnnouncementCommandRequest request)
+        {
+            var result = await _mediator.Send(request);
+
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        public async Task<IActionResult> DeleteAnnouncement([FromRoute] DeleteAnnouncementCommandRequest request)
+        {
+            var result = await _mediator.Send(request);
+
+            return Ok(result);
         }
     }
 }

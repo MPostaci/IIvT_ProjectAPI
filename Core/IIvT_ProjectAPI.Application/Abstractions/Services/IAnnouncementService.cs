@@ -14,7 +14,8 @@ namespace IIvT_ProjectAPI.Application.Abstractions.Services
         Task<PagedResponse<ListAnnouncementDto>> GetAnnouncementsByIdAsync(PagedRequest request, string id);
         Task<PagedResponse<ListAnnouncementDto>> GetAnnouncementsByCategoryAsync(PagedRequest request, string categoryId);
         Task<PagedResponse<ListAnnouncementDto>> GetAnnouncementsByPublisherAsync(PagedRequest request, string publisherId);
-
-        Task CreateAnnouncement(CreateAnnouncementDto createAnnouncementDto);
+        Task<bool> CreateAnnouncement(CreateAnnouncementDto createAnnouncementDto);
+        Task<bool> DeleteAnnouncement(string id);
+        Task<bool> UpdateAnnouncement(UpdateAnnouncementDto updateAnnouncementDto);
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace IIvT_ProjectAPI.Domain.Entities
 {
-    public class NewsItem : BaseEntity
+    public class NewsItem : SoftDeleteEntity
     {
         public string Title { get; set; }
         public string Description { get; set; }

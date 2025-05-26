@@ -18,6 +18,8 @@ namespace IIvT_ProjectAPI.Application.DTOs.Announcement
         public ContentTypeEnum ContentType { get; set; }
         public string PublisherFullName { get; set; }
         public string PublisherId { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
         public AnnouncementMediaFile File { get; set; }
 
     }
