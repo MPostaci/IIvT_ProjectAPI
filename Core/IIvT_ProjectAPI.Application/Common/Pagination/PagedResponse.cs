@@ -8,11 +8,14 @@ namespace IIvT_ProjectAPI.Application.Common.Pagination
 {
     public class PagedResponse<T>
     {
-        public IReadOnlyList<T> Items { get; }
-        public int TotalCount { get; }
-        public int PageNumber { get; }
-        public int PageSize { get; }
-        public int TotalPages { get; }
+        public PagedResponse() { }
+
+        // 2) make them settable
+        public IReadOnlyList<T> Items { get; set; }
+        public int TotalCount { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+        public int TotalPages { get; set; }
 
         public PagedResponse(
             IReadOnlyList<T> items,

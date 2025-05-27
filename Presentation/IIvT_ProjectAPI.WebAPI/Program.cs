@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 using IIvT_ProjectAPI.Infrastructure.Storage.Local;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
