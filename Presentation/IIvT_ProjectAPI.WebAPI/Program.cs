@@ -8,6 +8,8 @@ using System.Security.Claims;
 using System.Text;
 using IIvT_ProjectAPI.Infrastructure.Storage.Local;
 using System.Text.Json.Serialization;
+using IIvT_ProjectAPI.Persistence.Context;
+using IIvT_ProjectAPI.Persistence.SeedData;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,4 +86,17 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+await app.InitializeDatabaseAsync();
+
 app.Run();
+
+public static class WebApplicationExtensions
+{
+    public static async Task<WebApplication> InitializeDatabaseAsync(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<IIvT_ProjectAPIDbContext>();
+        await TurkishAdminDataSeeder.SeedAsync(db);
+        return app;
+    }
+}

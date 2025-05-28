@@ -33,6 +33,11 @@ namespace IIvT_ProjectAPI.Persistence.Context
         public DbSet<NewsItemMediaFile> NewsItemMediaFiles { get; set; }
         public DbSet<AnnouncementMediaFile> AnnouncementMediaFiles { get; set; }
         public DbSet<EventMediaFile> EventMediaFiles { get; set; }
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<District> Districts { get; set; }
+        public DbSet<Neighborhood> Neighborhoods { get; set; }
+
 
 
 
@@ -142,6 +147,16 @@ namespace IIvT_ProjectAPI.Persistence.Context
             builder.Entity<EventMediaFile>()
                 .ToTable("EventMediaFiles");
 
+
+            // 1) Index on District.CityId
+            builder.Entity<District>()
+                .HasIndex(d => d.CityId)
+                .HasDatabaseName("IX_District_CityId");
+
+            // 2) Index on Neighborhood.DistrictId
+            builder.Entity<Neighborhood>()
+                .HasIndex(n => n.DistrictId)
+                .HasDatabaseName("IX_Neighborhood_DistrictId");
 
             // Soft Delete
             var softDeleteInterface = typeof(ISoftDelete);

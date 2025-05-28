@@ -3,6 +3,7 @@ using System;
 using IIvT_ProjectAPI.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IIvT_ProjectAPI.Persistence.Migrations
 {
     [DbContext(typeof(IIvT_ProjectAPIDbContext))]
-    partial class IIvT_ProjectAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250528114918_mig_address")]
+    partial class mig_address
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,8 +265,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId")
-                        .HasDatabaseName("IX_District_CityId");
+                    b.HasIndex("CityId");
 
                     b.ToTable("Districts");
                 });
@@ -478,8 +479,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DistrictId")
-                        .HasDatabaseName("IX_Neighborhood_DistrictId");
+                    b.HasIndex("DistrictId");
 
                     b.ToTable("Neighborhoods");
                 });

@@ -76,6 +76,10 @@ namespace IIvT_ProjectAPI.Persistence
             services.AddScoped<IEventMediaFileReadRepository, EventMediaFileReadRepository>();
             services.AddScoped<IEventMediaFileWriteRepository, EventMediaFileWriteRepository>();
 
+            services.AddScoped<ICityReadRepository, CityReadRepository>();
+            services.AddScoped<IDistrictReadRepository, DistrictReadRepository>();
+            services.AddScoped<INeighborhoodReadRepository, NeighborhoodReadRepository>();
+
 
 
             services.AddScoped<IUserService, UserService>();
@@ -84,7 +88,8 @@ namespace IIvT_ProjectAPI.Persistence
             services.AddScoped<IAnnouncementService, AnnouncementService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<INewsItemService, NewsItemService>();
-            services.AddScoped<IEventService, EventService>();
+            //services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IAddressService, AddressService>();
 
 
 
