@@ -84,6 +84,7 @@ namespace IIvT_ProjectAPI.Persistence
             services.AddScoped<IAnnouncementService, AnnouncementService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<INewsItemService, NewsItemService>();
+            services.AddScoped<IEventService, EventService>();
 
 
 
