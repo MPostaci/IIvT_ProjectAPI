@@ -12,5 +12,7 @@ namespace IIvT_ProjectAPI.Application.Abstractions.Services
         Task<List<CityLookupDto>> GetCitiesAsync(CancellationToken ct = default);
         Task<List<DistrictLookupDto>> GetDistrictsByCityIdAsync(string cityId, CancellationToken ct = default);
         Task<List<NeighborhoodLookupDto>> GetNeighborhoodsByDistrictIdAsync(string districtId, CancellationToken ct = default);
+        Task<ListAddressDto> GetAddressByIdAsync(string addressId);
+        Task<GetAddressDto> AddAddressAsync(CreateAddressDto dto);
     }
 }

@@ -275,6 +275,9 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
@@ -295,10 +298,6 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("PublisherId")
                         .IsRequired()
                         .HasColumnType("text");
@@ -314,6 +313,8 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("CategoryId");
 
@@ -664,6 +665,34 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.UserAddress", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserAddresses");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -920,6 +949,12 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Event", b =>
                 {
+                    b.HasOne("IIvT_ProjectAPI.Domain.Entities.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("IIvT_ProjectAPI.Domain.Entities.Category", "Category")
                         .WithMany("Events")
                         .HasForeignKey("CategoryId")
@@ -931,6 +966,8 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                         .HasForeignKey("PublisherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Address");
 
                     b.Navigation("Category");
 
@@ -1013,6 +1050,25 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.UserAddress", b =>
+                {
+                    b.HasOne("IIvT_ProjectAPI.Domain.Entities.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IIvT_ProjectAPI.Domain.Entities.Identity.AppUser", "User")
+                        .WithMany("Addresses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("IIvT_ProjectAPI.Domain.Entities.Identity.AppRole", null)
@@ -1084,7 +1140,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.EventMediaFile", b =>
                 {
                     b.HasOne("IIvT_ProjectAPI.Domain.Entities.Event", "Event")
-                        .WithMany()
+                        .WithMany("Files")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1162,8 +1218,15 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                     b.Navigation("Neighborhoods");
                 });
 
+            modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Event", b =>
+                {
+                    b.Navigation("Files");
+                });
+
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Identity.AppUser", b =>
                 {
+                    b.Navigation("Addresses");
+
                     b.Navigation("Announcements");
 
                     b.Navigation("Baskets");

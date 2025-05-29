@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using IIvT_ProjectAPI.Application.Abstractions.Services;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,22 @@ namespace IIvT_ProjectAPI.Application.Features.Commands.EventFile.UploadEventFil
 {
     public class UploadEventFileCommandHandler : IRequestHandler<UploadEventFileCommandRequest, UploadEventFileCommandResponse>
     {
-        public Task<UploadEventFileCommandResponse> Handle(UploadEventFileCommandRequest request, CancellationToken cancellationToken)
+        readonly IEventService _eventService;
+
+        public UploadEventFileCommandHandler(IEventService eventService)
         {
-            throw new NotImplementedException();
+            _eventService = eventService;
+        }
+
+        public async Task<UploadEventFileCommandResponse> Handle(UploadEventFileCommandRequest request, CancellationToken cancellationToken)
+        {
+            var result = await _eventService.UploadFile(request.Files, request.EventId);
+
+            return new()
+            {
+                Success = result,
+                Message = result ? "File(s) uploaded successfully." : "File upload failed.",
+            };
         }
     }
 }

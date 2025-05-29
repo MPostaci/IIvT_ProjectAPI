@@ -7,5 +7,6 @@ namespace IIvT_ProjectAPI.Application.Features.Queries.Event.GetEventsByCategory
 {
     public class GetEventsByCategoryQueryRequest : PagedRequest, IRequest<PagedResponse<ListEventDto>>, IQueryRequest
     {
+        public string CategoryId { get; set; }
     }
 }

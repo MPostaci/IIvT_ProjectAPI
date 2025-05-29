@@ -1,4 +1,6 @@
-﻿using IIvT_ProjectAPI.Application.DTOs.Event;
+﻿using AutoMapper;
+using IIvT_ProjectAPI.Application.Abstractions.Services;
+using IIvT_ProjectAPI.Application.DTOs.Event;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,9 +12,16 @@ namespace IIvT_ProjectAPI.Application.Features.Commands.Event.CreateEvent
 {
     public class CreateEventCommandHandler : IRequestHandler<CreateEventCommandRequest, ListEventDto>
     {
-        public Task<ListEventDto> Handle(CreateEventCommandRequest request, CancellationToken cancellationToken)
+        readonly IMapper _mapper;
+        readonly IEventService _eventService;
+
+        public CreateEventCommandHandler(IMapper mapper, IEventService eventService)
         {
-            throw new NotImplementedException();
+            _mapper = mapper;
+            _eventService = eventService;
         }
+
+        public async Task<ListEventDto> Handle(CreateEventCommandRequest request, CancellationToken cancellationToken)
+            => await _eventService.CreateEventAsync(_mapper.Map<CreateEventDto>(request));
     }
 }

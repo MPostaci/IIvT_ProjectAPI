@@ -37,6 +37,7 @@ namespace IIvT_ProjectAPI.Persistence.Context
         public DbSet<City> Cities { get; set; }
         public DbSet<District> Districts { get; set; }
         public DbSet<Neighborhood> Neighborhoods { get; set; }
+        public DbSet<UserAddress> UserAddresses { get; set; }
 
 
 
@@ -78,6 +79,12 @@ namespace IIvT_ProjectAPI.Persistence.Context
                 .WithMany()
                 .HasForeignKey(a => a.PublisherId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // AppUser <=> UserAddress (1:N)
+            builder.Entity<UserAddress>()
+                .HasOne(ua => ua.User)
+                .WithMany(u => u.Addresses)
+                .HasForeignKey(ua => ua.UserId);
 
             // OrderStatus <=> Order (1:N)
             builder.Entity<OrderStatus>()

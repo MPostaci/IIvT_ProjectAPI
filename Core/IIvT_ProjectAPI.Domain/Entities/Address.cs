@@ -21,7 +21,18 @@ namespace IIvT_ProjectAPI.Domain.Entities
         {
             get
             {
-                return $"{Street}, {BuildingNumber}, {ApartmentNumber}, {Neighborhood?.Name}, {District?.Name}, {City?.Name}, {PostalCode}";
+                var parts = new List<string?>
+                {
+                    Street,
+                    BuildingNumber,
+                    ApartmentNumber,
+                    Neighborhood?.Name,
+                    District?.Name,
+                    City?.Name,
+                    PostalCode
+                };
+
+                return string.Join(", ", parts.Where(p => !string.IsNullOrWhiteSpace(p)));
             }
         }
         public City City { get; set; }

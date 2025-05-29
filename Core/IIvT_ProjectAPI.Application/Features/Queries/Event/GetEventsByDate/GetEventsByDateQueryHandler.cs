@@ -1,4 +1,5 @@
-﻿using IIvT_ProjectAPI.Application.Common.Pagination;
+﻿using IIvT_ProjectAPI.Application.Abstractions.Services;
+using IIvT_ProjectAPI.Application.Common.Pagination;
 using IIvT_ProjectAPI.Application.DTOs.Event;
 using MediatR;
 using System;
@@ -11,9 +12,18 @@ namespace IIvT_ProjectAPI.Application.Features.Queries.Event.GetEventsByDate
 {
     public class GetEventsByDateQueryHandler : IRequestHandler<GetEventsByDateQueryRequest, PagedResponse<ListEventDto>>
     {
-        public Task<PagedResponse<ListEventDto>> Handle(GetEventsByDateQueryRequest request, CancellationToken cancellationToken)
+        private readonly IEventService _eventService;
+
+        public GetEventsByDateQueryHandler(IEventService eventService)
         {
-            throw new NotImplementedException();
+            _eventService = eventService;
         }
+
+        public async Task<PagedResponse<ListEventDto>> Handle(GetEventsByDateQueryRequest request, CancellationToken cancellationToken)
+            => await _eventService.GetEventsByDate(
+                request.StartDate,
+                request.EndDate,
+                new() { PageNumber = request.PageNumber, PageSize = request.PageSize }
+            );
     }
 }
