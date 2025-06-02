@@ -1,4 +1,5 @@
 ﻿using IIvT_ProjectAPI.Application.DTOs.Address;
+using IIvT_ProjectAPI.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace IIvT_ProjectAPI.Application.Abstractions.Services
         Task<List<NeighborhoodLookupDto>> GetNeighborhoodsByDistrictIdAsync(string districtId, CancellationToken ct = default);
         Task<ListAddressDto> GetAddressByIdAsync(string addressId);
         Task<GetAddressDto> AddAddressAsync(CreateAddressDto dto);
+        Task<GetAddressDto> UpsertAsync(string? addressId, CreateAddressDto? dto);
+        
     }
 }

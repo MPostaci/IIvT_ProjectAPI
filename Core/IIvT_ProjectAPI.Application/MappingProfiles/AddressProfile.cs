@@ -39,7 +39,11 @@ namespace IIvT_ProjectAPI.Application.MappingProfiles
                 .ForMember(dest => dest.NeighborhoodName, opt => opt.MapFrom(src => src.Neighborhood.Name))
                 .ForMember(dest => dest.FullAddress, opt => opt.MapFrom(src => src.FullAddress));
 
-            CreateMap<Address, ListAddressDto>();
+            CreateMap<Address, ListAddressDto>()
+                .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.Name))
+                .ForMember(dest => dest.DistrictName, opt => opt.MapFrom(src => src.District.Name))
+                .ForMember(dest => dest.NeighborhoodName, opt => opt.MapFrom(src => src.Neighborhood.Name))
+                .ForMember(dest => dest.FullAddress, opt => opt.MapFrom(src => src.FullAddress));
 
             CreateMap<CreateAddressCommandRequest, CreateAddressDto>();
         }

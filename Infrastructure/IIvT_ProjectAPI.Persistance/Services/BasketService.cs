@@ -160,9 +160,15 @@ namespace IIvT_ProjectAPI.Persistence.Services
             return true;
         }
 
-        public Task<bool> Checkout()
+        public async Task<ListBasketDto> Checkout()
         {
-            throw new NotImplementedException();
+            var basket = await GetBasketAsync();
+
+            await _basketItemWriteRepository.Table
+                .Where(x => x.Basket.UserId == GetCurrentUserIdAsync().Result)
+                .ForEachAsync(x => _basketItemWriteRepository.Remove(x));
+
+            return basket;
         }
 
         public async Task<bool> ClearBasketAsync()

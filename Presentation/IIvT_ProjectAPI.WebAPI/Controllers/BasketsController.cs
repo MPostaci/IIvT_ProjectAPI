@@ -5,9 +5,7 @@ using IIvT_ProjectAPI.Application.Features.Commands.Basket.UpdateItemQuantity;
 using IIvT_ProjectAPI.Application.Features.Queries.Basket.GetUserBasket;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace IIvT_ProjectAPI.WebAPI.Controllers
 {

@@ -136,6 +136,16 @@ namespace IIvT_ProjectAPI.Persistence.Context
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Order>()
+                .HasOne(o => o.ShippingAddress)
+                .WithMany()
+                .HasForeignKey(o => o.ShippingAddressId);
+
+            builder.Entity<Order>()
+                .HasOne(o => o.BillingAddress)
+                .WithMany()
+                .HasForeignKey(o => o.BillingAddressId);
+
 
             // 1) Map the base
             builder.Entity<MediaFile>()
@@ -164,6 +174,15 @@ namespace IIvT_ProjectAPI.Persistence.Context
             builder.Entity<Neighborhood>()
                 .HasIndex(n => n.DistrictId)
                 .HasDatabaseName("IX_Neighborhood_DistrictId");
+
+            builder.Entity<OrderStatus>().HasData(
+                new OrderStatus { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), Name = "Pending", Description = "Order has been placed, awaiting payment." },
+                new OrderStatus { Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), Name = "Processing", Description = "Order is preparing" },
+                new OrderStatus { Id = Guid.Parse("00000000-0000-0000-0000-000000000003"), Name = "Shipped", Description = "Order has been shipped." },
+                new OrderStatus { Id = Guid.Parse("00000000-0000-0000-0000-000000000004"), Name = "Completed", Description = "Order delivered/completed." },
+                new OrderStatus { Id = Guid.Parse("00000000-0000-0000-0000-000000000005"), Name = "Cancelled", Description = "Order was cancelled." }
+            );
+
 
             // Soft Delete
             var softDeleteInterface = typeof(ISoftDelete);

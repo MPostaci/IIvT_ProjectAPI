@@ -14,6 +14,6 @@ namespace IIvT_ProjectAPI.Application.Abstractions.Services
         Task<bool> RemoveItemFromBasket(string productId);
         Task<bool> UpdateItemQuantityAsync(string productId, int quantity);
         Task<bool> ClearBasketAsync();
-        Task<bool> Checkout();
+        Task<ListBasketDto> Checkout();
     }
 }

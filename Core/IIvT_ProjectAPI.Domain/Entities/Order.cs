@@ -11,8 +11,8 @@ namespace IIvT_ProjectAPI.Domain.Entities
     public class Order : BaseEntity
     {
         public string UserId { get; set; }
-        public string ShippingAddress { get; set; }
-        public string BillingAddress { get; set; }
+        public Guid ShippingAddressId { get; set; }
+        public Guid BillingAddressId { get; set; }
         public string OrderCode { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
         public decimal TotalAmount { get; set; }
@@ -20,5 +20,7 @@ namespace IIvT_ProjectAPI.Domain.Entities
         public AppUser User { get; set; }
         public ICollection<OrderDetail> OrderDetails { get; set; }
         public OrderStatus OrderStatus { get; set; }
+        public Address ShippingAddress { get; set; }
+        public Address BillingAddress { get; set; }
     }
 }

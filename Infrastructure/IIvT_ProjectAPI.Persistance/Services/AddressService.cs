@@ -6,7 +6,9 @@ using IIvT_ProjectAPI.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -94,6 +96,23 @@ namespace IIvT_ProjectAPI.Persistence.Services
             {
                 throw new Exception("Failed to add address.");
             }
+
+        }
+        public async Task<GetAddressDto> UpsertAsync(string? addressId, CreateAddressDto? dto)
+        {
+            if (!string.IsNullOrEmpty(addressId))
+            {
+                var existing = await _addressReadRepository.GetByIdAsync(addressId);
+                if (existing == null)
+                    throw new Exception($"Address {addressId} not found.");
+                return _mapper.Map<GetAddressDto>(existing); ;
+            }
+
+            if (dto == null)
+                throw new ValidationException("Address details are required when no AddressId is specified.");
+
+            return await AddAddressAsync(dto);
+
         }
     }
 }

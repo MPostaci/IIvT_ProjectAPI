@@ -3,6 +3,7 @@ using System;
 using IIvT_ProjectAPI.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IIvT_ProjectAPI.Persistence.Migrations
 {
     [DbContext(typeof(IIvT_ProjectAPIDbContext))]
-    partial class IIvT_ProjectAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250530081854_mig_orderstatusupdate1")]
+    partial class mig_orderstatusupdate1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -575,11 +577,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("BillingAddressId");
-
                     b.HasIndex("OrderStatusId");
-
-                    b.HasIndex("ShippingAddressId");
 
                     b.HasIndex("UserId");
 
@@ -1053,22 +1051,10 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                         .WithMany("Orders")
                         .HasForeignKey("AppUserId");
 
-                    b.HasOne("IIvT_ProjectAPI.Domain.Entities.Address", "BillingAddress")
-                        .WithMany()
-                        .HasForeignKey("BillingAddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("IIvT_ProjectAPI.Domain.Entities.OrderStatus", "OrderStatus")
                         .WithMany("Orders")
                         .HasForeignKey("OrderStatusId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("IIvT_ProjectAPI.Domain.Entities.Address", "ShippingAddress")
-                        .WithMany()
-                        .HasForeignKey("ShippingAddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("IIvT_ProjectAPI.Domain.Entities.Identity.AppUser", "User")
@@ -1077,11 +1063,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("BillingAddress");
-
                     b.Navigation("OrderStatus");
-
-                    b.Navigation("ShippingAddress");
 
                     b.Navigation("User");
                 });

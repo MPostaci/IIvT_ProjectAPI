@@ -96,6 +96,9 @@ namespace IIvT_ProjectAPI.Persistence
             services.AddScoped<INewsItemService, NewsItemService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IAddressService, AddressService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderDetailService, OrderDetailService>();
+            services.AddScoped<IOrderStatusService, OrderStatusService>();
 
 
 
