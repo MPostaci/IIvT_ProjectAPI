@@ -38,6 +38,9 @@ namespace IIvT_ProjectAPI.Persistence.Context
         public DbSet<District> Districts { get; set; }
         public DbSet<Neighborhood> Neighborhoods { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<Menu> Menus { get; set; }
+        public DbSet<Endpoint> Endpoints { get; set; }
+        public DbSet<IdentityRoleEndpoint> IdentityRoleEndpoints { get; set; }
 
 
 
@@ -182,6 +185,59 @@ namespace IIvT_ProjectAPI.Persistence.Context
                 new OrderStatus { Id = Guid.Parse("00000000-0000-0000-0000-000000000004"), Name = "Completed", Description = "Order delivered/completed." },
                 new OrderStatus { Id = Guid.Parse("00000000-0000-0000-0000-000000000005"), Name = "Cancelled", Description = "Order was cancelled." }
             );
+
+            // Menu <=> Endpoint (1:N)
+
+            builder.Entity<Menu>(entity =>
+            {
+                entity.ToTable("Menus");
+                entity.HasKey(m => m.Id);
+                entity.Property(m => m.Name).IsRequired();
+                entity.HasMany(m => m.Endpoints)
+                    .WithOne(m => m.Menu)
+                    .HasForeignKey(e => e.MenuId);
+            });
+
+            builder.Entity<Endpoint>(entity =>
+            {
+                entity.ToTable("Endpoints");
+                entity.HasKey(m => m.Id);
+                entity.Property(e => e.Code).IsRequired();
+                entity.Property(e => e.HttpType).IsRequired();
+                entity.Property(e => e.ActionType).IsRequired();
+                entity.Property(e => e.Definition).IsRequired();
+                entity.HasMany(e => e.IdentityRoleEndpoints)
+                    .WithOne(j => j.Endpoint)
+                    .HasForeignKey(j => j.EndpointId);
+            });
+
+            // IdentityRoleEndpoint (join table)
+
+            builder.Entity<IdentityRoleEndpoint>(entity =>
+            {
+                entity.ToTable("IdentityRoleEndpoints");
+                entity.HasKey(e => new { e.RoleId, e.EndpointId });
+
+                entity.HasOne(j => j.Role)
+                    .WithMany(r => r.IdentityRoleEndpoints)
+                    .HasForeignKey(j => j.RoleId)
+                    .IsRequired();
+
+                entity.HasOne(j => j.Endpoint)
+                    .WithMany(e => e.IdentityRoleEndpoints)
+                    .HasForeignKey(j => j.EndpointId)
+                    .IsRequired();
+
+                //entity.HasOne<AppRole>()
+                //    .WithMany()
+                //    .HasForeignKey(e => e.RoleId)
+                //    .IsRequired();
+
+                //entity.HasOne(e => e.Endpoint)
+                //    .WithMany(e => e.IdentityRoleEndpoints)
+                //    .HasForeignKey(e => e.EndpointId)
+                //    .IsRequired();
+            });
 
 
             // Soft Delete

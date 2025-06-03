@@ -3,6 +3,7 @@ using System;
 using IIvT_ProjectAPI.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IIvT_ProjectAPI.Persistence.Migrations
 {
     [DbContext(typeof(IIvT_ProjectAPIDbContext))]
-    partial class IIvT_ProjectAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250602082219_mig_fixed_roles2")]
+    partial class mig_fixed_roles2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,7 +69,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasIndex("NeighborhoodId");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Announcement", b =>
@@ -115,7 +117,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasIndex("PublisherId");
 
-                    b.ToTable("Announcements", (string)null);
+                    b.ToTable("Announcements");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Basket", b =>
@@ -147,7 +149,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Baskets", (string)null);
+                    b.ToTable("Baskets");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.BasketItem", b =>
@@ -177,7 +179,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("BasketItems", (string)null);
+                    b.ToTable("BasketItems");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Category", b =>
@@ -209,7 +211,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.City", b =>
@@ -233,7 +235,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities", (string)null);
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.District", b =>
@@ -266,7 +268,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                     b.HasIndex("CityId")
                         .HasDatabaseName("IX_District_CityId");
 
-                    b.ToTable("Districts", (string)null);
+                    b.ToTable("Districts");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Endpoint", b =>
@@ -358,7 +360,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasIndex("PublisherId");
 
-                    b.ToTable("Events", (string)null);
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Identity.AppRole", b =>
@@ -565,7 +567,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                     b.HasIndex("DistrictId")
                         .HasDatabaseName("IX_Neighborhood_DistrictId");
 
-                    b.ToTable("Neighborhoods", (string)null);
+                    b.ToTable("Neighborhoods");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.NewsItem", b =>
@@ -613,7 +615,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasIndex("PublisherId");
 
-                    b.ToTable("NewsItems", (string)null);
+                    b.ToTable("NewsItems");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.Order", b =>
@@ -666,7 +668,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.OrderDetail", b =>
@@ -696,7 +698,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails", (string)null);
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.OrderStatus", b =>
@@ -720,7 +722,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OrderStatuses", (string)null);
+                    b.ToTable("OrderStatuses");
 
                     b.HasData(
                         new
@@ -784,7 +786,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("IIvT_ProjectAPI.Domain.Entities.UserAddress", b =>
@@ -812,7 +814,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserAddresses", (string)null);
+                    b.ToTable("UserAddresses");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1045,8 +1047,7 @@ namespace IIvT_ProjectAPI.Persistence.Migrations
                 {
                     b.HasOne("IIvT_ProjectAPI.Domain.Entities.Basket", "Basket")
                         .WithMany("BasketItems")
-                        .HasForeignKey("BasketId")
-                        .IsRequired();
+                        .HasForeignKey("BasketId");
 
                     b.HasOne("IIvT_ProjectAPI.Domain.Entities.Product", "Product")
                         .WithMany("BasketItems")

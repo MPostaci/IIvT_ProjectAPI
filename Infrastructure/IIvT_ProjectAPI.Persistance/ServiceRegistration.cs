@@ -86,6 +86,14 @@ namespace IIvT_ProjectAPI.Persistence
             services.AddScoped<IUserAddressReadRepository, UserAddressReadRepository>();
             services.AddScoped<IUserAddressWriteRepository, UserAddressWriteRepository>();
 
+            services.AddScoped<IMenuReadRepository, MenuReadRepository>();
+            services.AddScoped<IMenuWriteRepository, MenuWriteRepository>();
+
+            services.AddScoped<IEndpointReadRepository, EndpointReadRepository>();
+            services.AddScoped<IEndpointWriteRepository, EndpointWriteRepository>();
+
+            services.AddScoped<IIdentityRoleEndpointReadRepository, IdentityRoleEndpointReadRepository>();
+            services.AddScoped<IIdentityRoleEndpointWriteRepository, IdentityRoleEndpointWriteRepository>();
 
 
             services.AddScoped<IUserService, UserService>();
@@ -99,6 +107,7 @@ namespace IIvT_ProjectAPI.Persistence
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderDetailService, OrderDetailService>();
             services.AddScoped<IOrderStatusService, OrderStatusService>();
+            services.AddScoped<IAuthorizationEndpointService, AuthorizationEndpointService>();
 
 
 

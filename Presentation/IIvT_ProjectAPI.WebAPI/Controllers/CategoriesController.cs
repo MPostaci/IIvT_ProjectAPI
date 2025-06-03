@@ -1,4 +1,6 @@
-﻿using IIvT_ProjectAPI.Application.Features.Commands.Category.CreateCategory;
+﻿using IIvT_ProjectAPI.Application.Common.Constants;
+using IIvT_ProjectAPI.Application.Common.Security;
+using IIvT_ProjectAPI.Application.Features.Commands.Category.CreateCategory;
 using IIvT_ProjectAPI.Application.Features.Commands.Category.DeleteCategory;
 using IIvT_ProjectAPI.Application.Features.Commands.Category.UpdateCategory;
 using IIvT_ProjectAPI.Application.Features.Queries.Category.GetAllCategories;
@@ -13,7 +15,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Admin")]
     public class CategoriesController : ControllerBase
     {
         readonly IMediator _mediator;
@@ -24,6 +25,8 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        [AuthorizeDefinition(AuthorizeDefinitionConstans.Categories, ActionType.Reading, "Get All Categories")]
         public async Task<IActionResult> GetAllCategories([FromQuery] GetAllCategoriesQueryRequest request)
         {
             var response = await _mediator.Send(request);
@@ -31,6 +34,8 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("{Id}")]
+        [Authorize]
+        [AuthorizeDefinition(AuthorizeDefinitionConstans.Categories, ActionType.Reading, "Get Category By Id")]
         public async Task<IActionResult> GetCategoryById([FromRoute] GetByIdCategoryQueryRequest request)
         {
             var response = await _mediator.Send(request);
@@ -38,6 +43,8 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("content-types")]
+        [Authorize]
+        [AuthorizeDefinition(AuthorizeDefinitionConstans.Categories, ActionType.Reading, "Get All Content Types")]
         public async Task<IActionResult> GetContentTypes([FromQuery] GetContentTypesQueryRequest request)
         {
             var response = await _mediator.Send(request);
@@ -46,6 +53,8 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+        [AuthorizeDefinition(AuthorizeDefinitionConstans.Categories, ActionType.Writing, "Create Category")]
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryCommandRequest request)
         {
             var result = await _mediator.Send(request);
@@ -53,6 +62,8 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize]
+        [AuthorizeDefinition(AuthorizeDefinitionConstans.Categories, ActionType.Updating, "Update Category")]
         public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryCommandRequest request)
         {
             var result = await _mediator.Send(request);
@@ -60,6 +71,8 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
+        [AuthorizeDefinition(AuthorizeDefinitionConstans.Categories, ActionType.Deleting, "Delete Category")]
         public async Task<IActionResult> DeleteCategory([FromRoute] DeleteCategoryCommandRequest request)
         {
             var result = await _mediator.Send(request);

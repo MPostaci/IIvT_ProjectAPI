@@ -1,5 +1,7 @@
-﻿using IIvT_ProjectAPI.Application.Abstractions.Storage;
+﻿using IIvT_ProjectAPI.Application.Abstractions.Services;
+using IIvT_ProjectAPI.Application.Abstractions.Storage;
 using IIvT_ProjectAPI.Application.Abstractions.Token;
+using IIvT_ProjectAPI.Infrastructure.Services.Configuration;
 using IIvT_ProjectAPI.Infrastructure.Storage;
 using IIvT_ProjectAPI.Infrastructure.Token;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +15,7 @@ namespace IIvT_ProjectAPI.Infrastructure
         {
             services.AddScoped<ITokenHandler, TokenHandler>();
             services.AddScoped<IStorageService, StorageService>();
+            services.AddScoped<IApplicationService, ApplicationService>();
         }
 
         public static void AddStorage<T>(this IServiceCollection services) where T : S.Storage, IStorage

@@ -1,15 +1,15 @@
-using IIvT_ProjectAPI.Persistence;
-using IIvT_ProjectAPI.Infrastructure;
 using IIvT_ProjectAPI.Application;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using System.Text;
+using IIvT_ProjectAPI.Infrastructure;
 using IIvT_ProjectAPI.Infrastructure.Storage.Local;
-using System.Text.Json.Serialization;
+using IIvT_ProjectAPI.Persistence;
 using IIvT_ProjectAPI.Persistence.Context;
 using IIvT_ProjectAPI.Persistence.SeedData;
+using IIvT_ProjectAPI.WebAPI.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Security.Claims;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,8 +54,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer("Admin", options =>
+builder.Services.AddAuthentication(options => {
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new()
         {
@@ -66,7 +69,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Token:Issuer"],
             ValidAudience = builder.Configuration["Token:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
-            LifetimeValidator = (notBefore, expires, securityToken, validationParameters) => expires != null ? expires > DateTime.UtcNow : false,
+            LifetimeValidator = (notBefore, expires, securityToken, validationParameters) => expires != null && expires > DateTime.UtcNow,
             NameClaimType = ClaimTypes.Name,
         };
     });
@@ -86,17 +89,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await app.InitializeDatabaseAsync();
+await WebApplicationExtensions.InitializeDatabaseAsync(app);
 
 app.Run();
-
-public static class WebApplicationExtensions
-{
-    public static async Task<WebApplication> InitializeDatabaseAsync(this WebApplication app)
-    {
-        using var scope = app.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<IIvT_ProjectAPIDbContext>();
-        await TurkishAdminDataSeeder.SeedAsync(db);
-        return app;
-    }
-}
