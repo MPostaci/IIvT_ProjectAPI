@@ -30,8 +30,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.NewsItems, ActionType.Reading, "Get All News Items")]
         public async Task<IActionResult> GetAllNewsItems([FromQuery] GetAllNewsItemQueryRequest request)
         {
             var response = await _mediator.Send(request);
@@ -40,8 +38,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("{Id}")]
-        [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.NewsItems, ActionType.Reading, "Get News Item By Id")]
         public async Task<IActionResult> GetNewsItemsById([FromRoute] GetNewsItemByIdQueryRequest request)
         {
             var response = await _mediator.Send(request);
@@ -50,8 +46,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("by-category")]
-        [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.NewsItems, ActionType.Reading, "Get All News Items By Category Id")]
         public async Task<IActionResult> GetNewsItemsByCategoryId([FromQuery] GetNewsItemByCategoryIdQueryRequest request)
         {
             var response = await _mediator.Send(request);
@@ -60,8 +54,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("by-publisher")]
-        [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.NewsItems, ActionType.Reading, "Get All News Items By Publisher Id")]
         public async Task<IActionResult> GetNewsItemsByPublisherId([FromQuery] GetNewsItemByPublisherIdQueryRequest request)
         {
             var response = await _mediator.Send(request);
@@ -71,7 +63,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPost]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.NewsItems, ActionType.Writing, "Create News Item")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.NewsItems, ActionType.Writing, "Create News Item")]
         public async Task<IActionResult> CreateNewsItem([FromForm] CreateNewsItemCommandRequest request)
         {
             var response = await _mediator.Send(request);
@@ -81,7 +73,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPut]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.NewsItems, ActionType.Updating, "Update News Item")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.NewsItems, ActionType.Updating, "Update News Item")]
         public async Task<IActionResult> UpdateNewsItem([FromBody] UpdateNewsItemCommandRequest request)
         {
             var response = await _mediator.Send(request);
@@ -91,7 +83,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpDelete("{Id}")]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.NewsItems, ActionType.Deleting, "Delete News Item")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.NewsItems, ActionType.Deleting, "Delete News Item")]
         public async Task<IActionResult> DeleteNewsItem([FromRoute] DeleteNewsItemCommandRequest request)
         {
             var response = await _mediator.Send(request);
@@ -101,7 +93,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPost("upload-file")]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.NewsItems, ActionType.Writing, "Upload News Items File")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.NewsItems, ActionType.Writing, "Upload News Items File")]
         public async Task<IActionResult> UploadNewsItemFile([FromForm] UploadNewsItemFileCommandRequest request)
         {
             var response = await _mediator.Send(request);
@@ -111,7 +103,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPut("change-showcase")]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.NewsItems, ActionType.Updating, "Chagnge News Items Showcase Image")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.NewsItems, ActionType.Updating, "Chagnge News Items Showcase Image")]
         public async Task<IActionResult> ChangeNewsItemImageShowcase([FromQuery] ChangeShowcaseImageCommandRequest request)
         {
             var response = await _mediator.Send(request);
@@ -121,7 +113,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpDelete("delete-file")]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.NewsItems, ActionType.Deleting, "Delete News Items File")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.NewsItems, ActionType.Deleting, "Delete News Items File")]
         public async Task<IActionResult> RemoveNewsItemFile([FromQuery] RemoveNewsItemFileCommandRequest request)
         {
             var response = await _mediator.Send(request);

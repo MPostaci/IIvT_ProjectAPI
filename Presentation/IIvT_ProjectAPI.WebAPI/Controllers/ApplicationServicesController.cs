@@ -21,7 +21,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpGet("scan")]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.ApplicationServices, ActionType.Reading, "Get Authorize Definition Endpoints")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.ApplicationServices, ActionType.Reading, "Get Authorize Definition Endpoints")]
         public ActionResult<List<MenuDto>> GetAuthorizeDefinitionEndpoints()
         {
             var data = _applicationService.GetAuthorizeDefinitionEndpoints();

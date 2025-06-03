@@ -1,9 +1,8 @@
+using IIvT_ProjectAPI.API.Filters;
 using IIvT_ProjectAPI.Application;
 using IIvT_ProjectAPI.Infrastructure;
 using IIvT_ProjectAPI.Infrastructure.Storage.Local;
 using IIvT_ProjectAPI.Persistence;
-using IIvT_ProjectAPI.Persistence.Context;
-using IIvT_ProjectAPI.Persistence.SeedData;
 using IIvT_ProjectAPI.WebAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -20,7 +19,11 @@ builder.Services.AddInfrastructureServices();
 builder.Services.AddStorage<LocalStorage>();
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(opt =>
+{
+    opt.Filters.Add<RolePermissionFilter>();
+}
+    );
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {

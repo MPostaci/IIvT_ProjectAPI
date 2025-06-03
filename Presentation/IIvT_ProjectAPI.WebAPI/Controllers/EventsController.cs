@@ -28,8 +28,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Events, ActionType.Reading, "Get All Events")]
         public async Task<IActionResult> GetEvents([FromQuery] GetAllEventsQueryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -37,8 +35,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("location")]
-        [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Events, ActionType.Reading, "Get All Events By Location")]
         public async Task<IActionResult> GetEventsByLocation([FromQuery] GetEventsByLocationQueryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -46,8 +42,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("{EventId}")]
-        [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Events, ActionType.Reading, "Get Event By EventId")]
         public async Task<IActionResult> GetEventById([FromRoute] GetEventByIdQueryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -55,8 +49,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("category")]
-        [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Events, ActionType.Reading, "Get All Events By Category")]
         public async Task<IActionResult> GetEventsByCategory([FromQuery] GetEventsByCategoryQueryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -64,8 +56,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("date")]
-        [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Events, ActionType.Reading, "Get All Events By Date")]
         public async Task<IActionResult> GetEventsByDate([FromQuery] GetEventsByDateQueryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -73,8 +63,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("publisher")]
-        [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Events, ActionType.Reading, "Get All Events By Publisher Id")]
         public async Task<IActionResult> GetEventsByPublisher([FromQuery] GetEventsByPublisherQueryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -83,7 +71,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPost]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Events, ActionType.Writing, "Create Event")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Events, ActionType.Writing, "Create Event")]
         public async Task<IActionResult> CreateEvent([FromBody] CreateEventCommandRequest request)
         {
             var result = await _mediator.Send(request);
@@ -92,7 +80,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPut]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Events, ActionType.Updating, "Update Event")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Events, ActionType.Updating, "Update Event")]
         public async Task<IActionResult> UpdateEvent([FromBody] UpdateEventCommandRequest request)
         {
             var result = await _mediator.Send(request);
@@ -101,7 +89,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPost("upload-file")]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Events, ActionType.Deleting, "Delete Event")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Events, ActionType.Deleting, "Delete Event")]
         public async Task<IActionResult> UploadEventFile([FromForm] UploadEventFileCommandRequest request)
         {
             var result = await _mediator.Send(request);

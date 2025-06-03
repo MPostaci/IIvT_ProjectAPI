@@ -27,8 +27,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Announcements, ActionType.Reading, "Get All Announcements")]
         public async Task<IActionResult> GetAllAnnouncements([FromQuery] GetAllAnnouncementsCommandRequest request)
         {
             var result = await _mediator.Send(request);
@@ -37,8 +35,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("by-id")]
-        [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Announcements, ActionType.Reading, "Get Announcement By Id")]
         public async Task<IActionResult> GetAnnouncementById([FromQuery] GetAnnouncementsByIdQueryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -46,8 +42,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("by-categoryId")]
-        [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Announcements, ActionType.Reading, "Get Announcement By Category Id")]
         public async Task<IActionResult> GetAnnouncementsByCategoryId([FromQuery] GetAnnouncementByCategoryCommandRequest request)
         {
             var result = await _mediator.Send(request);
@@ -55,8 +49,6 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("by-publisherId")]
-        [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Announcements, ActionType.Reading, "Get Announcements By Publisher Id")]
         public async Task<IActionResult> GetAnnouncementsByPublisherId([FromQuery] GetAnnouncementsByPublisherCommandRequest request)
         {
             var result = await _mediator.Send(request);
@@ -65,7 +57,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPost]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Announcements, ActionType.Writing, "Create Announcement")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Announcements, ActionType.Writing, "Create Announcement")]
         public async Task<IActionResult> CreateAnnouncement([FromForm] CreateAnnouncementCommandRequest request)
         {
             var result = await _mediator.Send(request);
@@ -75,7 +67,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPut]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Announcements, ActionType.Updating, "Update Announcement")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Announcements, ActionType.Updating, "Update Announcement")]
         public async Task<IActionResult> UpdateAnnouncement([FromForm] UpdateAnnouncementCommandRequest request)
         {
             var result = await _mediator.Send(request);
@@ -85,7 +77,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Announcements, ActionType.Reading, "Delete Announcement")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Announcements, ActionType.Reading, "Delete Announcement")]
         public async Task<IActionResult> DeleteAnnouncement([FromRoute] DeleteAnnouncementCommandRequest request)
         {
             var result = await _mediator.Send(request);

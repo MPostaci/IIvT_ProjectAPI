@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace IIvT_ProjectAPI.Application.Common.Constants
 {
-    public static class AuthorizeDefinitionConstans
+    public static class AuthorizeDefinitionConstants
     {
         public const string Baskets = "Baskets";
         public const string Orders = "Orders";
         public const string Products = "Products";
         public const string ApplicationServices = "Application Services";
         public const string Users = "Users";
+        public const string Roles = "Roles";
         public const string NewsItems = "News Items";
         public const string Announcements = "Announcements";
         public const string Addresses = "Addresses";

@@ -108,6 +108,7 @@ namespace IIvT_ProjectAPI.Persistence
             services.AddScoped<IOrderDetailService, OrderDetailService>();
             services.AddScoped<IOrderStatusService, OrderStatusService>();
             services.AddScoped<IAuthorizationEndpointService, AuthorizationEndpointService>();
+            services.AddScoped<IRoleService, RoleService>();
 
 
 

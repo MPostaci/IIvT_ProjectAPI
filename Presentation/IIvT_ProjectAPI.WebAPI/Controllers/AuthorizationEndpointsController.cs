@@ -22,7 +22,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPost("get-roles")]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.AuthorizationEndpoints, ActionType.Reading, "Get Roles By Menu's Endpoint")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.AuthorizationEndpoints, ActionType.Reading, "Get Roles By Menu's Endpoint")]
         public async Task<IActionResult> GetRolesToEndpoint(GetRolesForEndpointQueryRequest request)
         {
             var response = await _mediator.Send(request);
@@ -32,7 +32,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPost("assign-roles")]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.AuthorizationEndpoints, ActionType.Writing, "Assing Role To Endpoint")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.AuthorizationEndpoints, ActionType.Writing, "Assing Role To Endpoint")]
         public async Task<IActionResult> AssignRoleEndpoint(AssignRoleToEndpointCommandRequest request)
         {
             var response = await _mediator.Send(request);

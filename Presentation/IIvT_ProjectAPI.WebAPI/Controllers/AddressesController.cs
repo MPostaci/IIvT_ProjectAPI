@@ -37,7 +37,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPost]
         [Authorize]
-        [AuthorizeDefinition(AuthorizeDefinitionConstans.Addresses, ActionType.Writing, "Create Address")]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Addresses, ActionType.Writing, "Create Address")]
         public async Task<IActionResult> CreateAddress([FromBody] CreateAddressCommandRequest request)
         {
             var result = await _mediator.Send(request);

@@ -32,8 +32,9 @@ namespace IIvT_ProjectAPI.WebAPI.Extensions
             {
                 foreach (var action in menu.Actions)
                 {
+                    string[] assignedRoles = (await authEndpointSvc.GetRolesForEndpointAsync(menu.MenuName, action.Code)).ToArray();
                     await authEndpointSvc.AssignRoleToEndpointAsync(
-                        roles: new string[0],
+                        roles: assignedRoles,
                         menuName: menu.MenuName,
                         code: action.Code
                         );

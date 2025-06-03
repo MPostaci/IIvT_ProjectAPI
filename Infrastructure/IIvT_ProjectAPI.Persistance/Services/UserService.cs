@@ -1,9 +1,13 @@
-﻿using IIvT_ProjectAPI.Application.Abstractions.Services;
+﻿using AutoMapper;
+using IIvT_ProjectAPI.Application.Abstractions.Services;
 using IIvT_ProjectAPI.Application.Abstractions.Token;
+using IIvT_ProjectAPI.Application.Common.Pagination;
 using IIvT_ProjectAPI.Application.DTOs;
 using IIvT_ProjectAPI.Application.DTOs.Token;
 using IIvT_ProjectAPI.Application.DTOs.User;
 using IIvT_ProjectAPI.Application.Exceptions;
+using IIvT_ProjectAPI.Application.Repositories;
+using IIvT_ProjectAPI.Domain.Entities;
 using IIvT_ProjectAPI.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -23,14 +27,38 @@ namespace IIvT_ProjectAPI.Persistence.Services
         readonly SignInManager<AppUser> _signInManager;
         readonly ITokenHandler _tokenHandler;
         readonly IConfiguration _configuration;
+        readonly IEndpointReadRepository _endpointReadRepository;
+        readonly IMapper _mapper;
 
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenHandler tokenHandler, IConfiguration configuration)
+        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenHandler tokenHandler, IConfiguration configuration, IMapper mapper, IEndpointReadRepository endpointReadRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenHandler = tokenHandler;
             _configuration = configuration;
+            _mapper = mapper;
+            _endpointReadRepository = endpointReadRepository;
         }
+
+        public async Task<PagedResponse<ListUserDto>> GetAllUsers(PagedRequest pagedRequest)
+            => await _userManager.Users.ToPagedListAsync<AppUser, ListUserDto>(_mapper, pagedRequest);
+
+
+        public async Task<string[]> GetRolesToUserAsync(string userIdOrName)
+        {
+            AppUser user = await _userManager.FindByIdAsync(userIdOrName) ??
+                await _userManager.FindByNameAsync(userIdOrName);
+
+
+            if (user != null)
+            {
+                IList<string> roles = await _userManager.GetRolesAsync(user);
+
+                return roles.ToArray();
+            }
+            return Array.Empty<string>();
+        }
+
         public async Task<BaseResponseDto> CreateAsync(CreateUserDto user)
         {
             if (user.Password != user.ConfirmPassword)
@@ -83,7 +111,7 @@ namespace IIvT_ProjectAPI.Persistence.Services
                 };
             }
 
-            throw new AuthenticationErrorException();
+            throw new Exception("Username or password is wrong.");
         }
 
         public async Task<(IdentityResult Result, TokenDto? Token)> RefreshTokenAsync(string refreshToken)
@@ -109,6 +137,53 @@ namespace IIvT_ProjectAPI.Persistence.Services
                 return (result, null);
 
             return (result, token);
+        }
+
+        public async Task AssignRoleToUser(string userId, string[] roles)
+        {
+            AppUser user = await _userManager.FindByIdAsync(userId);
+
+            if (user != null)
+            {
+                var usersRoles = await _userManager.GetRolesAsync(user);
+
+                await _userManager.RemoveFromRolesAsync(user, usersRoles);
+
+                await _userManager.AddToRolesAsync(user, roles);
+            }
+        }
+
+        public async Task<bool> HasRolePermissionToEndpointAsync(string name, string code)
+        {
+
+            
+            var userRoles = await GetRolesToUserAsync(name);
+
+            if (!userRoles.Any())
+                return false;
+
+
+            Endpoint? endpoint = await _endpointReadRepository.Table
+                .Include(e => e.IdentityRoleEndpoints)
+                    .ThenInclude(e => e.Role)
+                .FirstOrDefaultAsync(e => e.Code == code);
+
+            if (endpoint == null)
+                return false;
+
+
+            var endpointRoles = endpoint.IdentityRoleEndpoints.Select(r => r.Role.Name);
+
+            foreach (var userRole in userRoles)
+            {
+                foreach (var endpointRole in endpointRoles)
+                    if (userRole == endpointRole)
+                    {
+                        return true;
+                    }
+            }
+
+            return false;
         }
     }
 }
