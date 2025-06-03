@@ -2,5 +2,7 @@
 {
     public class UploadEventFileCommandResponse
     {
+        public string Message { get; set; }
+        public bool Success { get; set; }
     }
 }

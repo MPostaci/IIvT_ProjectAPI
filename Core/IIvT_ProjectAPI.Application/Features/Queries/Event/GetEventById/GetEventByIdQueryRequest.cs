@@ -7,5 +7,6 @@ namespace IIvT_ProjectAPI.Application.Features.Queries.Event.GetEventById
 {
     public class GetEventByIdQueryRequest : IRequest<ListEventDto>, IQueryRequest
     {
+        public string EventId { get; set; }
     }
 }

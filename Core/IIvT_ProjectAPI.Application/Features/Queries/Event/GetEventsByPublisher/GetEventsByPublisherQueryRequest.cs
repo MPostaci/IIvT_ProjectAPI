@@ -7,5 +7,6 @@ namespace IIvT_ProjectAPI.Application.Features.Queries.Event.GetEventsByPublishe
 {
     public class GetEventsByPublisherQueryRequest : PagedRequest, IRequest<PagedResponse<ListEventDto>>, IQueryRequest
     {
+        public string PublisherId { get; set; }
     }
 }

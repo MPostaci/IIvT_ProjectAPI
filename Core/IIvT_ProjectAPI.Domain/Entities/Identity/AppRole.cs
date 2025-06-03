@@ -9,5 +9,6 @@ namespace IIvT_ProjectAPI.Domain.Entities.Identity
 {
     public class AppRole : IdentityRole<string>
     {
+        public ICollection<IdentityRoleEndpoint> IdentityRoleEndpoints { get; set; } = new List<IdentityRoleEndpoint>();
     }
 }

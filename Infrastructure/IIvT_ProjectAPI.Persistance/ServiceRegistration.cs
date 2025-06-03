@@ -76,6 +76,24 @@ namespace IIvT_ProjectAPI.Persistence
             services.AddScoped<IEventMediaFileReadRepository, EventMediaFileReadRepository>();
             services.AddScoped<IEventMediaFileWriteRepository, EventMediaFileWriteRepository>();
 
+            services.AddScoped<IAddressReadRepository, AddressReadRepository>();
+            services.AddScoped<IAddressWriteRepository, AddressWriteRepository>();
+
+            services.AddScoped<ICityReadRepository, CityReadRepository>();
+            services.AddScoped<IDistrictReadRepository, DistrictReadRepository>();
+            services.AddScoped<INeighborhoodReadRepository, NeighborhoodReadRepository>();
+
+            services.AddScoped<IUserAddressReadRepository, UserAddressReadRepository>();
+            services.AddScoped<IUserAddressWriteRepository, UserAddressWriteRepository>();
+
+            services.AddScoped<IMenuReadRepository, MenuReadRepository>();
+            services.AddScoped<IMenuWriteRepository, MenuWriteRepository>();
+
+            services.AddScoped<IEndpointReadRepository, EndpointReadRepository>();
+            services.AddScoped<IEndpointWriteRepository, EndpointWriteRepository>();
+
+            services.AddScoped<IIdentityRoleEndpointReadRepository, IdentityRoleEndpointReadRepository>();
+            services.AddScoped<IIdentityRoleEndpointWriteRepository, IdentityRoleEndpointWriteRepository>();
 
 
             services.AddScoped<IUserService, UserService>();
@@ -85,6 +103,11 @@ namespace IIvT_ProjectAPI.Persistence
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<INewsItemService, NewsItemService>();
             services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IAddressService, AddressService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderDetailService, OrderDetailService>();
+            services.AddScoped<IOrderStatusService, OrderStatusService>();
+            services.AddScoped<IAuthorizationEndpointService, AuthorizationEndpointService>();
 
 
 

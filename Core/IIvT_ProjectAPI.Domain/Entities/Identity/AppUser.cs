@@ -18,5 +18,7 @@ namespace IIvT_ProjectAPI.Domain.Entities.Identity
         public ICollection<Announcement> Announcements { get; set; } = new List<Announcement>();
         public ICollection<Order> Orders { get; set; } = new List<Order>();
         public ICollection<Basket> Baskets { get; set; } = new List<Basket>();
+
+        public ICollection<UserAddress> Addresses { get; set; }
     }
 }

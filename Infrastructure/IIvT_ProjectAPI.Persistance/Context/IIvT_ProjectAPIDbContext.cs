@@ -33,6 +33,15 @@ namespace IIvT_ProjectAPI.Persistence.Context
         public DbSet<NewsItemMediaFile> NewsItemMediaFiles { get; set; }
         public DbSet<AnnouncementMediaFile> AnnouncementMediaFiles { get; set; }
         public DbSet<EventMediaFile> EventMediaFiles { get; set; }
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<District> Districts { get; set; }
+        public DbSet<Neighborhood> Neighborhoods { get; set; }
+        public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<Menu> Menus { get; set; }
+        public DbSet<Endpoint> Endpoints { get; set; }
+        public DbSet<IdentityRoleEndpoint> IdentityRoleEndpoints { get; set; }
+
 
 
 
@@ -73,6 +82,12 @@ namespace IIvT_ProjectAPI.Persistence.Context
                 .WithMany()
                 .HasForeignKey(a => a.PublisherId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // AppUser <=> UserAddress (1:N)
+            builder.Entity<UserAddress>()
+                .HasOne(ua => ua.User)
+                .WithMany(u => u.Addresses)
+                .HasForeignKey(ua => ua.UserId);
 
             // OrderStatus <=> Order (1:N)
             builder.Entity<OrderStatus>()
@@ -124,6 +139,16 @@ namespace IIvT_ProjectAPI.Persistence.Context
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Order>()
+                .HasOne(o => o.ShippingAddress)
+                .WithMany()
+                .HasForeignKey(o => o.ShippingAddressId);
+
+            builder.Entity<Order>()
+                .HasOne(o => o.BillingAddress)
+                .WithMany()
+                .HasForeignKey(o => o.BillingAddressId);
+
 
             // 1) Map the base
             builder.Entity<MediaFile>()
@@ -141,6 +166,78 @@ namespace IIvT_ProjectAPI.Persistence.Context
 
             builder.Entity<EventMediaFile>()
                 .ToTable("EventMediaFiles");
+
+
+            // 1) Index on District.CityId
+            builder.Entity<District>()
+                .HasIndex(d => d.CityId)
+                .HasDatabaseName("IX_District_CityId");
+
+            // 2) Index on Neighborhood.DistrictId
+            builder.Entity<Neighborhood>()
+                .HasIndex(n => n.DistrictId)
+                .HasDatabaseName("IX_Neighborhood_DistrictId");
+
+            builder.Entity<OrderStatus>().HasData(
+                new OrderStatus { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), Name = "Pending", Description = "Order has been placed, awaiting payment." },
+                new OrderStatus { Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), Name = "Processing", Description = "Order is preparing" },
+                new OrderStatus { Id = Guid.Parse("00000000-0000-0000-0000-000000000003"), Name = "Shipped", Description = "Order has been shipped." },
+                new OrderStatus { Id = Guid.Parse("00000000-0000-0000-0000-000000000004"), Name = "Completed", Description = "Order delivered/completed." },
+                new OrderStatus { Id = Guid.Parse("00000000-0000-0000-0000-000000000005"), Name = "Cancelled", Description = "Order was cancelled." }
+            );
+
+            // Menu <=> Endpoint (1:N)
+
+            builder.Entity<Menu>(entity =>
+            {
+                entity.ToTable("Menus");
+                entity.HasKey(m => m.Id);
+                entity.Property(m => m.Name).IsRequired();
+                entity.HasMany(m => m.Endpoints)
+                    .WithOne(m => m.Menu)
+                    .HasForeignKey(e => e.MenuId);
+            });
+
+            builder.Entity<Endpoint>(entity =>
+            {
+                entity.ToTable("Endpoints");
+                entity.HasKey(m => m.Id);
+                entity.Property(e => e.Code).IsRequired();
+                entity.Property(e => e.HttpType).IsRequired();
+                entity.Property(e => e.ActionType).IsRequired();
+                entity.Property(e => e.Definition).IsRequired();
+                entity.HasMany(e => e.IdentityRoleEndpoints)
+                    .WithOne(j => j.Endpoint)
+                    .HasForeignKey(j => j.EndpointId);
+            });
+
+            // IdentityRoleEndpoint (join table)
+
+            builder.Entity<IdentityRoleEndpoint>(entity =>
+            {
+                entity.ToTable("IdentityRoleEndpoints");
+                entity.HasKey(e => new { e.RoleId, e.EndpointId });
+
+                entity.HasOne(j => j.Role)
+                    .WithMany(r => r.IdentityRoleEndpoints)
+                    .HasForeignKey(j => j.RoleId)
+                    .IsRequired();
+
+                entity.HasOne(j => j.Endpoint)
+                    .WithMany(e => e.IdentityRoleEndpoints)
+                    .HasForeignKey(j => j.EndpointId)
+                    .IsRequired();
+
+                //entity.HasOne<AppRole>()
+                //    .WithMany()
+                //    .HasForeignKey(e => e.RoleId)
+                //    .IsRequired();
+
+                //entity.HasOne(e => e.Endpoint)
+                //    .WithMany(e => e.IdentityRoleEndpoints)
+                //    .HasForeignKey(e => e.EndpointId)
+                //    .IsRequired();
+            });
 
 
             // Soft Delete

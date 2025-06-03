@@ -16,7 +16,10 @@ namespace IIvT_ProjectAPI.Application.MappingProfiles
                            {
                                Id = (int)src.ContentType,
                                Name = src.ContentType.ToString()
-                           }));
+                           }))
+                .ReverseMap()
+                .ForMember(dest => dest.ContentType,
+                           opt => opt.MapFrom(src => (ContentTypeEnum)src.ContentType.Id));
 
 
             CreateMap<CreateCategoryDto, Category>();

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -25,5 +25,9 @@
     <ProjectReference Include="..\..\Core\IIvT_ProjectAPI.Application\IIvT_ProjectAPI.Application.csproj" />
     <ProjectReference Include="..\..\Core\IIvT_ProjectAPI.Domain\IIvT_ProjectAPI.Domain.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+	<None Include="SeedData\*.json">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+  </ItemGroup>
 </Project>
