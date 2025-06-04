@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using IIvT_ProjectAPI.Application.Abstractions.Services;
+using IIvT_ProjectAPI.Application.Common.Pagination;
 using IIvT_ProjectAPI.Application.DTOs.Address;
 using IIvT_ProjectAPI.Application.Repositories;
 using IIvT_ProjectAPI.Domain.Entities;
@@ -55,6 +56,13 @@ namespace IIvT_ProjectAPI.Persistence.Services
             .OrderBy(n => n.Name)
             .Select(n => new NeighborhoodLookupDto(n.Id, n.Name))
             .ToListAsync(ct);
+
+        public async Task<PagedResponse<GetAddressDto>> GetAddresses(PagedRequest request)
+        {
+            var query = _addressReadRepository.GetAll();
+
+            return await query.ToPagedListAsync<Address, GetAddressDto>(_mapper, request);
+        }
 
         public async Task<ListAddressDto> GetAddressByIdAsync(string addressId)
             => _mapper.Map<ListAddressDto>(await _addressReadRepository.GetByIdAsync(addressId));

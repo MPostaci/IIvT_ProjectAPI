@@ -24,7 +24,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Baskets, ActionType.Reading, "Get Logged In User's Basket")]
         public async Task<IActionResult> GetBasket([FromQuery] GetUserBasketQueryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -33,6 +33,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPost]
         [Authorize]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Baskets, ActionType.Writing, "Add Item To Basket")]
         public async Task<IActionResult> AddItemToBasket([FromQuery] AddItemToBasketCommandRequest request)
         {
             var response = await _mediator.Send(request);
@@ -42,6 +43,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpPut]
         [Authorize]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Baskets, ActionType.Updating, "Update Item Quantity")]
         public async Task<IActionResult> UpdateItemInBasket([FromQuery] UpdateItemQuantityCommandRequest request)
         {
             var response = await _mediator.Send(request);
@@ -51,6 +53,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpDelete]
         [Authorize]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Baskets, ActionType.Deleting, "Remove Item From Basket")]
         public async Task<IActionResult> RemoveItemFromBasket([FromQuery] RemoveItemFromBasketCommandRequest request)
         {
             var result = await _mediator.Send(request);
@@ -60,6 +63,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
 
         [HttpDelete("clear")]
         [Authorize]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Baskets, ActionType.Deleting, "Clear The Basket")]
         public async Task<IActionResult> ClearBasket([FromRoute] ClearBasketCommandRequest request)
         {
             var result = await _mediator.Send(request);

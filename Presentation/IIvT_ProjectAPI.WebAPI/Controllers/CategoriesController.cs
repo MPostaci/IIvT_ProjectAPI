@@ -25,6 +25,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllCategories([FromQuery] GetAllCategoriesQueryRequest request)
         {
             var response = await _mediator.Send(request);
@@ -32,6 +33,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("{Id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCategoryById([FromRoute] GetByIdCategoryQueryRequest request)
         {
             var response = await _mediator.Send(request);
@@ -39,6 +41,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("content-types")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetContentTypes([FromQuery] GetContentTypesQueryRequest request)
         {
             var response = await _mediator.Send(request);

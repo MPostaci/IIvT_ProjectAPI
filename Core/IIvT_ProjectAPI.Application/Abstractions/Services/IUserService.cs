@@ -1,5 +1,6 @@
 ﻿using IIvT_ProjectAPI.Application.Common.Pagination;
 using IIvT_ProjectAPI.Application.DTOs;
+using IIvT_ProjectAPI.Application.DTOs.Address;
 using IIvT_ProjectAPI.Application.DTOs.Token;
 using IIvT_ProjectAPI.Application.DTOs.User;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +21,7 @@ namespace IIvT_ProjectAPI.Application.Abstractions.Services
         Task<(IdentityResult Result, TokenDto? Token)> RefreshTokenAsync(string refreshToken);
         Task AssignRoleToUser(string userId, string[] roles);
         Task<bool> HasRolePermissionToEndpointAsync(string name, string code);
-
+        Task<PagedResponse<GetAddressDto>> GetUserSavedAdresses(PagedRequest pagedRequest);
+        Task<GetAddressDto> AddAddressAsync(CreateAddressDto dto);
     }
 }

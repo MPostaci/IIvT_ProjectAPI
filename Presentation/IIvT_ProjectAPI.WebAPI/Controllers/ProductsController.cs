@@ -29,6 +29,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Get([FromQuery] GetAllProductsQueryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -36,6 +37,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("{Id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> Get([FromRoute] GetByIdProductQueryRequest request)
         {
             ListProductDto result = await _mediator.Send(request);

@@ -28,6 +28,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetEvents([FromQuery] GetAllEventsQueryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -35,6 +36,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("location")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetEventsByLocation([FromQuery] GetEventsByLocationQueryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -42,6 +44,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("{EventId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetEventById([FromRoute] GetEventByIdQueryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -49,6 +52,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("category")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetEventsByCategory([FromQuery] GetEventsByCategoryQueryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -56,6 +60,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("date")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetEventsByDate([FromQuery] GetEventsByDateQueryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -63,6 +68,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("publisher")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetEventsByPublisher([FromQuery] GetEventsByPublisherQueryRequest request)
         {
             var result = await _mediator.Send(request);

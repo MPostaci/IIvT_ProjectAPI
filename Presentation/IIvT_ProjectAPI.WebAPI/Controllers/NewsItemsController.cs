@@ -30,6 +30,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllNewsItems([FromQuery] GetAllNewsItemQueryRequest request)
         {
             var response = await _mediator.Send(request);
@@ -38,6 +39,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("{Id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetNewsItemsById([FromRoute] GetNewsItemByIdQueryRequest request)
         {
             var response = await _mediator.Send(request);
@@ -46,6 +48,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("by-category")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetNewsItemsByCategoryId([FromQuery] GetNewsItemByCategoryIdQueryRequest request)
         {
             var response = await _mediator.Send(request);
@@ -54,6 +57,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         }
 
         [HttpGet("by-publisher")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetNewsItemsByPublisherId([FromQuery] GetNewsItemByPublisherIdQueryRequest request)
         {
             var response = await _mediator.Send(request);

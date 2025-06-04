@@ -1,5 +1,6 @@
 ﻿using IIvT_ProjectAPI.Application.Abstractions.Services;
 using IIvT_ProjectAPI.Application.Common.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -24,6 +25,11 @@ namespace IIvT_ProjectAPI.API.Filters
             if (!string.IsNullOrEmpty(name) && name != "superadmin")
             {
                 var descriptor = context.ActionDescriptor as ControllerActionDescriptor;
+
+                var allowAnonymous = descriptor?.MethodInfo.GetCustomAttribute(typeof(AllowAnonymousAttribute)) as AllowAnonymousAttribute;
+
+                if (allowAnonymous != null)
+                    await next();
 
                 var attribute = descriptor?.MethodInfo.GetCustomAttribute(typeof(AuthorizeDefinitionAttribute)) as AuthorizeDefinitionAttribute;
 

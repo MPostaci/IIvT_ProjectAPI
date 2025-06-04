@@ -3,21 +3,21 @@ using IIvT_ProjectAPI.Application.Abstractions.Services;
 using IIvT_ProjectAPI.Application.Abstractions.Token;
 using IIvT_ProjectAPI.Application.Common.Pagination;
 using IIvT_ProjectAPI.Application.DTOs;
+using IIvT_ProjectAPI.Application.DTOs.Address;
 using IIvT_ProjectAPI.Application.DTOs.Token;
 using IIvT_ProjectAPI.Application.DTOs.User;
 using IIvT_ProjectAPI.Application.Exceptions;
 using IIvT_ProjectAPI.Application.Repositories;
-using IIvT_ProjectAPI.Domain.Entities;
+using System.Linq;
+using E = IIvT_ProjectAPI.Domain.Entities;
 using IIvT_ProjectAPI.Domain.Entities.Identity;
-using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using IIvT_ProjectAPI.Persistence.Repositories;
+using IIvT_ProjectAPI.Domain.Entities;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace IIvT_ProjectAPI.Persistence.Services
 {
@@ -29,8 +29,13 @@ namespace IIvT_ProjectAPI.Persistence.Services
         readonly IConfiguration _configuration;
         readonly IEndpointReadRepository _endpointReadRepository;
         readonly IMapper _mapper;
+        readonly IAddressService _addressService;
+        readonly IHttpContextAccessor _httpContextAccessor;
+        readonly IUserAddressWriteRepository _userAddressWriteRepository;
+        readonly IUserAddressReadRepository _userAddressReadRepository;
+        readonly IAddressReadRepository _addressReadRepository;
 
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenHandler tokenHandler, IConfiguration configuration, IMapper mapper, IEndpointReadRepository endpointReadRepository)
+        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenHandler tokenHandler, IConfiguration configuration, IMapper mapper, IEndpointReadRepository endpointReadRepository, IAddressService addressService, IHttpContextAccessor httpContextAccessor, IUserAddressWriteRepository userAddressWriteRepository, IUserAddressReadRepository userAddressReadRepository, IAddressReadRepository addressReadRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -38,6 +43,21 @@ namespace IIvT_ProjectAPI.Persistence.Services
             _configuration = configuration;
             _mapper = mapper;
             _endpointReadRepository = endpointReadRepository;
+            _addressService = addressService;
+            _httpContextAccessor = httpContextAccessor;
+            _userAddressWriteRepository = userAddressWriteRepository;
+            _userAddressReadRepository = userAddressReadRepository;
+            _addressReadRepository = addressReadRepository;
+        }
+
+        public async Task<AppUser> ContextUser()
+        {
+            var username = _httpContextAccessor?.HttpContext?.User.Identity?.Name;
+
+            var user = await _userManager.FindByNameAsync(username)
+                ?? throw new NotFoundUserException();
+
+            return user;
         }
 
         public async Task<PagedResponse<ListUserDto>> GetAllUsers(PagedRequest pagedRequest)
@@ -163,7 +183,7 @@ namespace IIvT_ProjectAPI.Persistence.Services
                 return false;
 
 
-            Endpoint? endpoint = await _endpointReadRepository.Table
+            E.Endpoint? endpoint = await _endpointReadRepository.Table
                 .Include(e => e.IdentityRoleEndpoints)
                     .ThenInclude(e => e.Role)
                 .FirstOrDefaultAsync(e => e.Code == code);
@@ -184,6 +204,46 @@ namespace IIvT_ProjectAPI.Persistence.Services
             }
 
             return false;
+        }
+
+        public async Task<PagedResponse<GetAddressDto>> GetUserSavedAdresses(PagedRequest pagedRequest)
+        {
+            var userId = (await ContextUser()).Id;
+
+            // Query addresses directly from the database to get an IQueryable
+            var addressesQuery = _userAddressReadRepository
+                .GetWhere(x => x.UserId == userId)
+                .Include(x => x.Address)
+                .Select(x => x.Address);
+
+            return await addressesQuery.ToPagedListAsync<Address, GetAddressDto>(_mapper, pagedRequest);
+        }
+
+        public async Task<GetAddressDto> AddAddressAsync(CreateAddressDto dto)
+        {
+            var user = await ContextUser();
+
+            var addedAddress = await _addressService.AddAddressAsync(dto);
+
+            bool isAddressExist = await _userAddressReadRepository.AnyAsync(x => x.AddressId == addedAddress.Id);
+
+            if (isAddressExist)
+                throw new Exception("Address already exist");
+
+            UserAddress userAddress = new()
+            {
+                Id = Guid.NewGuid(),
+                AddressId = addedAddress.Id,
+                UserId = user.Id,
+            };
+
+            await _userAddressWriteRepository.AddAsync(userAddress);
+
+            user.Addresses.Add(userAddress);
+
+            await _userManager.UpdateAsync(user);
+
+            return addedAddress;
         }
     }
 }
