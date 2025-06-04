@@ -124,6 +124,12 @@ namespace IIvT_ProjectAPI.Persistence
                 typeof(IPipelineBehavior<,>),
                 typeof(EfTransactionBehavior<,>)
                 );
+
+
+            services.AddTransient(
+                typeof(IPipelineBehavior<,>),
+                typeof(LoggingBehavior<,>)
+                );
         }
     }
 }
