@@ -42,24 +42,6 @@ namespace IIvT_ProjectAPI.Application.Features.Commands.ProductImage.UploadProdu
 
 
             return new();
-
-
-            //List<(string fileName, string pathOrContainerName)> result = await _storageService.UploadAsync("photo-images", request.FormFileCollection);
-
-
-            //P.Product product = await _productReadRepository.GetByIdAsync(request.Id);
-
-            //await _productImageFileWriteRepository.AddRangeAsync(result.Select(r => new P.ProductImageFile
-            //{
-            //    FileName = r.fileName,
-            //    Path = r.pathOrContainerName,
-            //    Storage = _storageService.StorageName,
-            //    Products = new List<P.Product>() { product }
-            //}).ToList());
-
-            //await _productImageFileWriteRepository.SaveAsync();
-
-            //return new();
         }
     }
 }

@@ -3,6 +3,7 @@ using IIvT_ProjectAPI.Application.Common.Security;
 using IIvT_ProjectAPI.Application.Features.Commands.AppUser.AddAddress;
 using IIvT_ProjectAPI.Application.Features.Commands.AppUser.AssingRoleToUser;
 using IIvT_ProjectAPI.Application.Features.Commands.AppUser.CreateUser;
+using IIvT_ProjectAPI.Application.Features.Commands.AppUser.DeleteAddress;
 using IIvT_ProjectAPI.Application.Features.Commands.AppUser.LoginUser;
 using IIvT_ProjectAPI.Application.Features.Commands.AppUser.RefreshTokenLogin;
 using IIvT_ProjectAPI.Application.Features.Queries.AppUser.GetAllUsers;
@@ -12,6 +13,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Nodes;
 
 namespace IIvT_ProjectAPI.WebAPI.Controllers
 {
@@ -60,6 +62,7 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
             CreateUserCommandResponse response = await _mediator.Send(createUserCommandRequest);
 
             return Ok(response);
+
         }
 
         [HttpPost("[action]")]
@@ -94,6 +97,16 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
         [Authorize]
         [AuthorizeDefinition(AuthorizeDefinitionConstants.Users, ActionType.Writing, "Add User Address")]
         public async Task<IActionResult> AddUserAddress([FromBody] AddAddressCommandRequest request)
+        {
+            var response = await _mediator.Send(request);
+
+            return Ok(response);
+        }
+
+        [HttpDelete("[action]")]
+        [Authorize]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Users, ActionType.Deleting, "Delete User Address")]
+        public async Task<IActionResult> DeleteUserAddress([FromBody] DeleteUserAddressCommandRequest request)
         {
             var response = await _mediator.Send(request);
 

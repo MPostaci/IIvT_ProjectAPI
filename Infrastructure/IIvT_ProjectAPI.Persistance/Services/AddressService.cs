@@ -4,6 +4,7 @@ using IIvT_ProjectAPI.Application.Common.Pagination;
 using IIvT_ProjectAPI.Application.DTOs.Address;
 using IIvT_ProjectAPI.Application.Repositories;
 using IIvT_ProjectAPI.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -121,6 +122,31 @@ namespace IIvT_ProjectAPI.Persistence.Services
 
             return await AddAddressAsync(dto);
 
+        }
+
+        public async Task<GetAddressDto> UpdateAddressAsync(UpdateAddressDto dto)
+        {
+            var address = await _addressReadRepository.Table
+                .Include(a => a.City)
+                .Include(a => a.District)
+                .Include(a => a.Neighborhood)
+                .FirstOrDefaultAsync(a => a.Id == Guid.Parse(dto.Id))
+                ?? throw new BadHttpRequestException("Address couldn't find");
+
+            address = _mapper.Map(dto, address);
+
+            _addressWriteRepository.Update(address);
+            
+            return _mapper.Map<GetAddressDto>(address);
+        }
+
+        public async Task<bool> DeleteAddressAsync(string addressId)
+        {
+            var address = await _addressReadRepository.GetByIdAsync(addressId);
+            
+            address.IsDeleted = true;
+
+            return _addressWriteRepository.Update(address);
         }
     }
 }

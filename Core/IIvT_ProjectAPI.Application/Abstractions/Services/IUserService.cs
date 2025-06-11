@@ -23,5 +23,6 @@ namespace IIvT_ProjectAPI.Application.Abstractions.Services
         Task<bool> HasRolePermissionToEndpointAsync(string name, string code);
         Task<PagedResponse<GetAddressDto>> GetUserSavedAdresses(PagedRequest pagedRequest);
         Task<GetAddressDto> AddAddressAsync(CreateAddressDto dto);
+        Task<bool> DeleteUserAddressAsync(string addressId);
     }
 }

@@ -227,16 +227,6 @@ namespace IIvT_ProjectAPI.Persistence.Context
                     .WithMany(e => e.IdentityRoleEndpoints)
                     .HasForeignKey(j => j.EndpointId)
                     .IsRequired();
-
-                //entity.HasOne<AppRole>()
-                //    .WithMany()
-                //    .HasForeignKey(e => e.RoleId)
-                //    .IsRequired();
-
-                //entity.HasOne(e => e.Endpoint)
-                //    .WithMany(e => e.IdentityRoleEndpoints)
-                //    .HasForeignKey(e => e.EndpointId)
-                //    .IsRequired();
             });
 
 

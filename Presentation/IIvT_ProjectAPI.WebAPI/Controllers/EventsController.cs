@@ -1,7 +1,9 @@
 ﻿using IIvT_ProjectAPI.Application.Common.Constants;
 using IIvT_ProjectAPI.Application.Common.Security;
 using IIvT_ProjectAPI.Application.Features.Commands.Event.CreateEvent;
+using IIvT_ProjectAPI.Application.Features.Commands.Event.DeleteEvent;
 using IIvT_ProjectAPI.Application.Features.Commands.Event.UpdateEvent;
+using IIvT_ProjectAPI.Application.Features.Commands.EventFile.DeleteEventFile;
 using IIvT_ProjectAPI.Application.Features.Commands.EventFile.UploadEventFile;
 using IIvT_ProjectAPI.Application.Features.Queries.Event.GetAllEvents;
 using IIvT_ProjectAPI.Application.Features.Queries.Event.GetEventById;
@@ -93,14 +95,32 @@ namespace IIvT_ProjectAPI.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPost("upload-file")]
+        [HttpDelete("{EventId}")]
         [Authorize]
         [AuthorizeDefinition(AuthorizeDefinitionConstants.Events, ActionType.Deleting, "Delete Event")]
+        public async Task<IActionResult> DeleteEvent([FromRoute] DeleteEventCommandRequest request)
+        {
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+
+        [HttpPost("upload-file")]
+        [Authorize]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Events, ActionType.Writing, "Upload Event File")]
         public async Task<IActionResult> UploadEventFile([FromForm] UploadEventFileCommandRequest request)
         {
             var result = await _mediator.Send(request);
             return Ok(result);
         }
 
+        [HttpDelete("[action]")]
+        [Authorize]
+        [AuthorizeDefinition(AuthorizeDefinitionConstants.Events, ActionType.Deleting, "Delete Event File")]
+        public async Task<IActionResult> DeleteEventFile([FromQuery] DeleteEventFileCommandRequest request)
+        {
+            var result = await _mediator.Send(request);
+
+            return Ok(result);
+        }
     }
 }

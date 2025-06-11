@@ -18,6 +18,7 @@ namespace IIvT_ProjectAPI.Application.Abstractions.Services
         Task<ListAddressDto> GetAddressByIdAsync(string addressId);
         Task<GetAddressDto> AddAddressAsync(CreateAddressDto dto);
         Task<GetAddressDto> UpsertAsync(string? addressId, CreateAddressDto? dto);
-        
+        Task<GetAddressDto> UpdateAddressAsync(UpdateAddressDto dto);
+        Task<bool> DeleteAddressAsync(string addressId);
     }
 }

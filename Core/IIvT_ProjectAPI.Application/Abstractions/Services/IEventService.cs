@@ -29,5 +29,6 @@ namespace IIvT_ProjectAPI.Application.Abstractions.Services
         Task<bool> DeleteEventAsync(string eventId);
         Task<ListEventDto> UpdateEventAsync(UpdateEventDto updateEventDto);
         Task<bool> UploadFile(IFormFileCollection files, string eventId);
+        Task<bool> RemoveFileAsync(string eventId, string fileId);
     }
 }

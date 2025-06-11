@@ -56,4 +56,3 @@ namespace IIvT_ProjectAPI.Application.MappingProfiles
         }
     }
 }
-//System.Collections.Generic.List`1[Microsoft.AspNetCore.Http.IFormFile]' to type 'Microsoft.AspNetCore.Http.IFormFileCollection'.

@@ -5,5 +5,7 @@ namespace IIvT_ProjectAPI.Application.Features.Commands.EventFile.DeleteEventFil
 {
     public class DeleteEventFileCommandRequest : IRequest<DeleteEventFileCommandResponse>, ICommandRequest
     {
+        public string EventId { get; set; }
+        public string FileId { get; set; }
     }
 }

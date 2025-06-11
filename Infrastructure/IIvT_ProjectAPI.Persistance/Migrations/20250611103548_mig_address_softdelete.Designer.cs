@@ -3,6 +3,7 @@ using System;
 using IIvT_ProjectAPI.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IIvT_ProjectAPI.Persistence.Migrations
 {
     [DbContext(typeof(IIvT_ProjectAPIDbContext))]
-    partial class IIvT_ProjectAPIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250611103548_mig_address_softdelete")]
+    partial class mig_address_softdelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

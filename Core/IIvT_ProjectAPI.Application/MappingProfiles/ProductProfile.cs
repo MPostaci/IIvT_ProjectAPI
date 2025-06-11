@@ -15,18 +15,6 @@ namespace IIvT_ProjectAPI.Application.MappingProfiles
             CreateMap<UpdateProductDto, Product>();
             CreateMap<CreateProductCommandRequest, CreateProductDto>();
             CreateMap<UpdateProductCommandRequest, UpdateProductDto>();
-
-
-            //// Product → ListProductDto
-            //CreateMap<Product, ListProductDto>()
-            //    // MediaFile → MediaFileDto profiline yönlendir
-            //    .ForMember(dest => dest.Images,
-            //               opt => opt.MapFrom(src => src.Images))
-            //    // Eğer ListProductDto’da BasketItems yoksa aşağıyı ekle:
-            //    .ForAllOtherMembers(opt => opt.Ignore());
-
-            //// MediaFile → MediaFileDto
-            //CreateMap<MediaFile, MediaFileDto>();
         }
     }
 }

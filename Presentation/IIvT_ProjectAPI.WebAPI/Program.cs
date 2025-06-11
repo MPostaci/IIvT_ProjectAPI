@@ -4,6 +4,7 @@ using IIvT_ProjectAPI.Infrastructure;
 using IIvT_ProjectAPI.Infrastructure.Storage.Local;
 using IIvT_ProjectAPI.Persistence;
 using IIvT_ProjectAPI.WebAPI.Extensions;
+using IIvT_ProjectAPI.WebAPI.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -109,9 +110,13 @@ try
         app.UseSwaggerUI();
     }
 
-    app.UseHttpsRedirection();
+    app.UseCustomExceptionHandler();
+
+    app.UseRequestResponseLogging();
 
     app.UseSerilogRequestLogging();
+
+    app.UseHttpsRedirection();
 
     app.UseAuthentication();
     app.UseAuthorization();

@@ -108,7 +108,7 @@ namespace IIvT_ProjectAPI.Persistence.Services
             AppUser user = await _userManager.FindByEmailAsync(usernameOrEmail) ??
             await
             _userManager.FindByNameAsync(usernameOrEmail) ??
-            throw new NotFoundUserException();
+            throw new NotFoundException("user", usernameOrEmail);
 
             SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
 
@@ -131,7 +131,8 @@ namespace IIvT_ProjectAPI.Persistence.Services
                 };
             }
 
-            throw new Exception("Username or password is wrong.");
+
+            throw new BadHttpRequestException("Username or password is wrong.");
         }
 
         public async Task<(IdentityResult Result, TokenDto? Token)> RefreshTokenAsync(string refreshToken)
@@ -244,6 +245,22 @@ namespace IIvT_ProjectAPI.Persistence.Services
             await _userManager.UpdateAsync(user);
 
             return addedAddress;
+        }
+
+
+
+        public async Task<bool> DeleteUserAddressAsync(string addressId)
+        {
+            var userAddress = await _userAddressReadRepository.Table
+                .Include(x => x.Address)
+                .FirstOrDefaultAsync(ua => ua.AddressId == Guid.Parse(addressId))
+                ?? throw new BadHttpRequestException("Address couldn't find");
+
+            userAddress.IsDeleted = true;
+
+            userAddress.Address.IsDeleted = true;
+
+            return true;
         }
     }
 }

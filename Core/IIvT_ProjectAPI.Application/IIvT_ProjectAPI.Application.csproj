@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Commands\AppUser\UpdateAddress\" />
     <Folder Include="Validators\AppUser\" />
   </ItemGroup>
 

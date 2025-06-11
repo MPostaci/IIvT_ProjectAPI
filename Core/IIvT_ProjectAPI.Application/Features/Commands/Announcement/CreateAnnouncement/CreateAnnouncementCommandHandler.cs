@@ -23,9 +23,13 @@ namespace IIvT_ProjectAPI.Application.Features.Commands.Announcement.CreateAnnou
 
         public async Task<CreateAnnouncementCommandResponse> Handle(CreateAnnouncementCommandRequest request, CancellationToken cancellationToken)
         {
-            await _announcementService.CreateAnnouncement(_mapper.Map<CreateAnnouncementDto>(request));
+            var result = await _announcementService.CreateAnnouncement(_mapper.Map<CreateAnnouncementDto>(request));
 
-            return new();
+            return new()
+            {
+                Success = result,
+                Message = result ? "Announcement created successfully" : "An error occured while creating announcement"
+            };
         }
     }
 }

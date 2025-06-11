@@ -33,11 +33,6 @@ namespace IIvT_ProjectAPI.Application.Features.Commands.ProductImage.RemoveProdu
 
             await _storageService.DeleteAsync(file.Path);
 
-            //string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, path);
-
-            //if (!Directory.Exists(uploadPath))
-            //    Directory.CreateDirectory(uploadPath);
-
             return new();
         }
     }

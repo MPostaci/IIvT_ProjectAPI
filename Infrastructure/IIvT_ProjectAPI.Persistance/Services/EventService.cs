@@ -30,8 +30,9 @@ namespace IIvT_ProjectAPI.Persistence.Services
         readonly UserManager<AppUser> _userManager;
         readonly IStorageService _storageService;
         readonly IEventMediaFileWriteRepository _eventMediaFileWriteRepository;
+        readonly IEventMediaFileReadRepository _eventMediaFileReadRepository;
 
-        public EventService(IMapper mapper, IEventReadRepository eventReadRepository, IEventWriteRepository eventWriteRepository, IAddressService addressService, ICategoryService categoryService, UserManager<AppUser> userManager, IStorageService storageService, IEventMediaFileWriteRepository eventMediaFileWriteRepository)
+        public EventService(IMapper mapper, IEventReadRepository eventReadRepository, IEventWriteRepository eventWriteRepository, IAddressService addressService, ICategoryService categoryService, UserManager<AppUser> userManager, IStorageService storageService, IEventMediaFileWriteRepository eventMediaFileWriteRepository, IEventMediaFileReadRepository eventMediaFileReadRepository)
         {
             _mapper = mapper;
             _eventReadRepository = eventReadRepository;
@@ -41,6 +42,7 @@ namespace IIvT_ProjectAPI.Persistence.Services
             _userManager = userManager;
             _storageService = storageService;
             _eventMediaFileWriteRepository = eventMediaFileWriteRepository;
+            _eventMediaFileReadRepository = eventMediaFileReadRepository;
         }
 
         public async Task<PagedResponse<ListEventDto>> GetAllEvents(PagedRequest pagedRequest)
@@ -183,13 +185,13 @@ namespace IIvT_ProjectAPI.Persistence.Services
             if (!Guid.TryParse(eventId, out Guid parsedEventId))
                 throw new ArgumentException("Invalid eventId format.", nameof(eventId));
 
-            List<(string fileName, string pathOrContainerName)> uploadedFiles = await _storageService.UploadAsync("announcement-files", files);
+            List<(string fileName, string pathOrContainerName)> uploadedFiles = await _storageService.UploadAsync("event-files", files);
 
-            List<EventMediaFile> annFile = new List<EventMediaFile>();
+            List<EventMediaFile> eventFiles = new List<EventMediaFile>();
 
             foreach (var file in uploadedFiles)
             {
-                annFile.Add(new EventMediaFile
+                eventFiles.Add(new EventMediaFile
                 {
                     Id = Guid.NewGuid(),
                     FileName = file.fileName,
@@ -200,7 +202,23 @@ namespace IIvT_ProjectAPI.Persistence.Services
                 });
             }
 
-            return await _eventMediaFileWriteRepository.AddRangeAsync(annFile);
+            return await _eventMediaFileWriteRepository.AddRangeAsync(eventFiles);
         }
+
+        public async Task<bool> RemoveFileAsync(string eventId, string fileId)
+        {
+
+            var file = _eventMediaFileReadRepository.GetWhere(f => f.Id == Guid.Parse(fileId) && f.EventId == Guid.Parse(eventId)).FirstOrDefault()
+                ?? throw new Exception("File not found.");
+
+            _eventMediaFileWriteRepository.Remove(file);
+
+            string filePath = $"event-files/{file.FileName}";
+
+            await _storageService.DeleteAsync(filePath);
+
+            return true;
+        }
+
     }
 }

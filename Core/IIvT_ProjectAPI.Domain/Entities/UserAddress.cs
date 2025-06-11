@@ -3,7 +3,7 @@ using IIvT_ProjectAPI.Domain.Entities.Identity;
 
 namespace IIvT_ProjectAPI.Domain.Entities
 {
-    public class UserAddress : BaseEntity
+    public class UserAddress : SoftDeleteEntity
     {
         public string UserId { get; set; }
         public AppUser User { get; set; }

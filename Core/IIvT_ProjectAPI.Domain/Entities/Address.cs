@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IIvT_ProjectAPI.Domain.Entities
 {
-    public class Address : BaseEntity
+    public class Address : SoftDeleteEntity
     {
         public Guid CityId { get; set; }
         public Guid DistrictId { get; set; }
